@@ -1,0 +1,10 @@
+.map {
+    height: 400px;
+    width: 85%;
+    border: 2px solid #198754;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #4a4a4a;
+    margin: 2em auto;
+}

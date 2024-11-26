@@ -1,0 +1,23 @@
+﻿
+@{
+    ViewData["Title"] = "Register";
+}
+
+<link href="/css/register.css" rel="stylesheet">
+
+<div class="form-container">
+    <form class="d-flex register-form">
+        <ul class="list-form">
+            <h3>Register</h3>
+            <input class="form-control me-2 input-margin" placeholder="Full name" aria-label="Full name" required>
+            <input class="form-control me-2 input-margin" type="email" placeholder="E-mail" aria-label="E-mail" required>
+            <input class="form-control me-2 input-margin" type="tel" placeholder="Phone number" aria-label="Phone number" required>
+            <input class="form-control me-2 input-margin" type="Password" placeholder="Password" aria-label="Password" required>
+            <input class="form-control me-2 input-margin" type="Password" placeholder="Password confirm" aria-label="Password confirm" required>
+            <button class="btn btn-outline-success register-button input-margin" type="submit">Register</button>
+        </ul>
+    </form>
+
+    <a class="nav-link navWhiteText" asp-area="" asp-controller="Home" asp-action="Tester">Tester</a>
+</div>
+

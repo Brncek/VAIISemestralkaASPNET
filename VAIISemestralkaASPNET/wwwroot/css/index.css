@@ -1,0 +1,36 @@
+
+
+
+.navSlider {
+     height: 30em;
+     object-fit: cover;
+     object-position: 50% 30%;
+}
+
+.navSlider-shift {
+    object-position: 50% 30%;
+}
+
+.navSlider-shift2 {
+    object-position: 50% 70%;
+}
+
+
+.indicatorsImage {
+    height: 10em;
+    width: 100%;
+    object-fit: contain;
+    align-content: center;
+    margin: auto;
+}
+
+.topPadding5 {
+    padding-top: 5em;
+}
+
+.bottomPadding2 {
+    padding-bottom: 2em;
+}
+
+
+

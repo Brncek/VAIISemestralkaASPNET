@@ -1,0 +1,89 @@
+body {
+    background: black;
+}
+
+.navbar {
+    background: #383838 !important;
+}
+
+.logo {
+    height: 60px;
+    width: auto;
+}
+
+.navWhiteText {
+    color: white;
+    text-align: center;
+    font-size: x-large;
+}
+
+.nav-item {
+    padding: 0.75em 1em;
+}
+
+.navWhiteText:hover {
+    color: #8f8f8f;
+    outline: 2px solid #198754;
+    border-radius: 5px;
+}
+
+.navbar-brand-custom {
+    margin-right: var(--bs-navbar-brand-margin-end);
+    font-size: var(--bs-navbar-brand-font-size);
+    color: var(--bs-navbar-brand-color);
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+
+.navbar-toggler-custom {
+    border: 2px solid white;
+}
+
+.navbar-toggler-icon-custom {
+    display: inline-block;
+    width: 1.5em;
+    height: 1.5em;
+    vertical-align: middle;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%2833, 255, 255, 255%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 100%;
+}
+
+footer {
+    background: #383838;
+    height: 6em;
+}
+
+.copyright {
+    padding-top: 1.5em;
+}
+
+p {
+    color: #a3a3a3;
+    text-align: center;
+    font-size: x-large;
+}
+
+h1 {
+    padding-top: 1.5em;
+    color: white;
+    text-align: center;
+    font-size: xxx-large;
+}
+
+h3 {
+    color: #39cf88;
+    text-align: center;
+}
+
+.box {
+    padding-top: 1.5em;
+    border: 2px solid #198754;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #4a4a4a;
+    margin: 2em auto;
+    width: 85%;
+}

@@ -1,0 +1,19 @@
+.full {
+    color: white !important;
+    background: red !important;
+}
+
+.closed {
+    color: white !important;
+    background: gray !important;
+}
+
+.available {
+    color: #ffffff !important;
+    background: #198754 !important;
+}
+
+.reserve-button {
+    border-radius: 2em;
+    background: white;
+}

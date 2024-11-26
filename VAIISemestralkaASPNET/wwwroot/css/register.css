@@ -1,0 +1,30 @@
+.form-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.register-form {
+    border: 2px solid #198754;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #4a4a4a;
+    max-width: 400px;
+    width: 100%;
+}
+
+.register-button {
+    width: 100%;
+}
+
+.list-form {
+    margin: auto;
+    list-style: none;
+    padding-right: 1.5em;
+}
+
+.input-margin {
+    margin-top: 1em;
+}
