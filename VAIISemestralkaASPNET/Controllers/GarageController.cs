@@ -29,8 +29,17 @@ namespace VAIISemestralkaASPNET.Controllers
         [Authorize]
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Car.Include(c => c.User);
-            return View(await applicationDbContext.ToListAsync());
+            if(User.IsInRole("Admin")) {
+                var cars = _context.Car.Include(c => c.User).ToListAsync();
+                return View(await cars);
+            }
+            else
+            {
+                var userID = _userManager.GetUserId(User)!;
+                var applicationDbContext = _context.Car.Include(c => c.User).Where(c => c.UserId == userID);
+                return View(await applicationDbContext.ToListAsync());
+            }
+            
         }
 
         // GET: Garage/Details/5
@@ -79,7 +88,7 @@ namespace VAIISemestralkaASPNET.Controllers
                 int year = carDetails.ModelYear;
                 name = make + " " + model + " " + year;
             }
-            catch (Exception ex)
+            catch 
             {
                 return View(car);
             }
@@ -123,14 +132,14 @@ namespace VAIISemestralkaASPNET.Controllers
                 return NotFound();
             }
 
-            
-                try
-                {
+            car.UserId = _userManager.GetUserId(User)!;
+            try
+            {
                     _context.Update(car);
                     await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
+            }
+            catch (DbUpdateConcurrencyException)
+            {
                     if (!CarExists(car.Id))
                     {
                         return NotFound();
@@ -139,8 +148,8 @@ namespace VAIISemestralkaASPNET.Controllers
                     {
                         throw;
                     }
-                }
-                return RedirectToAction(nameof(Index));
+            }
+            return RedirectToAction(nameof(Index));
           
         }
 

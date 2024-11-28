@@ -1,4 +1,6 @@
-﻿@model IEnumerable<VAIISemestralkaASPNET.Models.Car>
+﻿@using Microsoft.AspNetCore.Identity
+@model IEnumerable<VAIISemestralkaASPNET.Models.Car>
+@inject UserManager<IdentityUser> UserManager
 
 @{
     ViewData["Title"] = "Index";
@@ -7,11 +9,15 @@
 <link href="~/css/form.css" rel="stylesheet" />
 <link href="~/css/garage.css" rel="stylesheet" />
 
-<div class="d-flex justify-content-center align-items-center">
-    <form asp-action="Create" method="get">
-        <button type="submit" class="btn buttonMargin btn-outline-success">Add</button>
-    </form>
-</div>
+@if (!User.IsInRole("Admin"))
+{
+    <div class="d-flex justify-content-center align-items-center">
+        <form asp-action="Create" method="get">
+            <button type="submit" class="btn buttonMargin btn-outline-success">Add</button>
+        </form>
+    </div>
+}
+
 
 
 <div class="container content">
@@ -24,6 +30,10 @@
                 <th>
                     @Html.DisplayNameFor(model => model.VIN)
                 </th>
+                @if (User.IsInRole("Admin"))
+                {
+                    <th>User name</th>
+                }
                 <th></th>
             </tr>
         </thead>
@@ -37,6 +47,13 @@
                     <td>
                         @Html.DisplayFor(modelItem => item.VIN)
                     </td>
+
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <td>
+                            @(await UserManager.FindByIdAsync(item.UserId))
+                        </td>
+                    }
 
                     <td>
                         <div class="row">
