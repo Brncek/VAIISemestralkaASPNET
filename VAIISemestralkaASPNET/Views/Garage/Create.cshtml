@@ -1,0 +1,30 @@
+﻿@model VAIISemestralkaASPNET.Models.Car
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<link href="/css/form.css" rel="stylesheet">
+
+<hr />
+<div class="form-container">
+        <form asp-action="Create" class="d-flex register-form">
+            <ul>
+                <h3>Add car</h3>
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class= class="form-floating mb-3">
+                    <label asp-for="VIN" class="control-label"></label>
+                <input asp-for="VIN" class="form-control" placeholder="VIN" required />
+                    <span asp-validation-for="VIN" class="text-danger"></span>
+                </div>
+                <div ;">
+                <input type="submit" value="Create" class="w-100 btn btn-lg btn-primary" />
+                </div>
+            </ul>
+        </form>
+</div>
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

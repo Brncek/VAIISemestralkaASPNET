@@ -87,10 +87,14 @@ namespace VAIISemestralkaASPNET
             var userManager = services.GetRequiredService<UserManager<IdentityUser>>();
             var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
 
-            const string adminRoleName = "Admin";
-            if (!await roleManager.RoleExistsAsync(adminRoleName))
+            string[] roles = { "Admin", "Manager", "User", "Mechanic" };
+
+            foreach (var role in roles)
             {
-                await roleManager.CreateAsync(new IdentityRole(adminRoleName));
+                if (!await roleManager.RoleExistsAsync(role))
+                {
+                    await roleManager.CreateAsync(new IdentityRole(role));
+                }
             }
 
             const string adminEmail = "admin@admin.com";
@@ -109,7 +113,7 @@ namespace VAIISemestralkaASPNET
                 var result = await userManager.CreateAsync(adminUser, adminPassword);
                 if (result.Succeeded)
                 {
-                    await userManager.AddToRoleAsync(adminUser, adminRoleName);
+                    await userManager.AddToRoleAsync(adminUser, "Admin");
                 }
                 else
                 {

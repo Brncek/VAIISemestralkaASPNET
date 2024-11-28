@@ -1,0 +1,15 @@
+﻿.content{
+	min-height: 500px;
+}
+
+td, tr {
+	color: white;
+	text-align: center;
+	vertical-align: middle
+}
+
+.buttonMargin{
+	margin: 10px;
+	min-width: 150px;
+	
+}

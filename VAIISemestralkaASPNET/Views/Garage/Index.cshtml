@@ -1,0 +1,68 @@
+﻿@model IEnumerable<VAIISemestralkaASPNET.Models.Car>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<link href="~/css/form.css" rel="stylesheet" />
+<link href="~/css/garage.css" rel="stylesheet" />
+
+<div class="d-flex justify-content-center align-items-center">
+    <form asp-action="Create" method="get">
+        <button type="submit" class="btn buttonMargin btn-outline-success">Add</button>
+    </form>
+</div>
+
+
+<div class="container content">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.VIN)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.VIN)
+                    </td>
+
+                    <td>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <form asp-action="Edit" method="get" asp-route-id="@item.Id">
+                                    <button type="submit" class="btn btn-outline-success buttonMargin">Edit</button>
+                                </form>
+                            </div>
+
+                            <div class="col-md-4">
+                                <form asp-action="Details" method="get" asp-route-id="@item.Id">
+                                    <button type="submit" class="btn btn-outline-success buttonMargin">Details</button>
+                                </form>
+                                </div>
+
+                             <div class="col-md-4">
+                                <form asp-action="Delete" method="get" asp-route-id="@item.Id">
+                                    <button type="submit" class="btn btn-outline-success buttonMargin">Delete</button>
+                                </form>
+                             </div>
+                        </div>
+                        
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+

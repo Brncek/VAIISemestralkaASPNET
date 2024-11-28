@@ -1,0 +1,28 @@
+﻿@model VAIISemestralkaASPNET.Models.Car
+@using VAIISemestralkaASPNET.App
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<link href="~/css/garagedetails.css" rel="stylesheet" />
+<link href="~/css/form.css" rel="stylesheet" />
+
+<div class="container">
+    <h3> @Model.Name </h3>
+    <hr/>
+    <dl class="row">
+        @foreach (var line in await VINAPI.GetInfos(Model.VIN))
+        {
+            <div class="register-form">
+                <dt class="col-sm-2">
+                    @line.Name
+                </dt>
+                <dd class="col-sm-10">
+                    @line.Values
+                </dd>
+            </div>
+        }
+    </dl>
+</div>
+

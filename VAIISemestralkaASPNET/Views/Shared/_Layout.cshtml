@@ -37,6 +37,27 @@
                             <a class="nav-link navWhiteText" asp-area="" asp-controller="Home" asp-action="Reservations">Reservations</a>
                         </li>
 
+                        @if (User.IsInRole("User"))
+                        {
+                            <li class="nav-item ">
+                                <a class="nav-link navWhiteText" asp-area="" asp-controller="Garage" asp-action="Index">Garage</a>
+                            </li>
+                        }
+
+                        @if (User.IsInRole("Manager"))
+                        {
+                            <li class="nav-item ">
+                                <a class="nav-link navWhiteText" asp-area="" asp-controller="Garage" asp-action="Index">Cars</a>
+                            </li>
+                        }
+
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <li class="nav-item ">
+                                <a class="nav-link navWhiteText" asp-area="" asp-controller="Garage" asp-action="Index">Garages</a>
+                            </li>
+                        }
+
                     </ul>
 
                     <partial name="_LoginPartial" />
