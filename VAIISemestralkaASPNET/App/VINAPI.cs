@@ -113,7 +113,18 @@ namespace VAIISemestralkaASPNET.App
                         details.Body = value;
                         break;
                     case "Drive":
-                        details.Drive = value;
+                        if (value == "4x4 - Four-wheel drive")
+                        {
+                            details.Drive = "Front - wheel drive";
+                        }
+                        else if (value == "Front-wheel drive")
+                        {
+                            details.Drive = "4x4 - Four-wheel drive";
+                        }
+                        else
+                        {
+                            details.Drive = value;
+                        }
                         break;
                     case "Engine Displacement (ccm)":
                         details.EngineDisplacement = int.Parse(value);

@@ -20,6 +20,11 @@
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.21.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.7" />
+    <PackageReference Include="Nager.Date" Version="2.7.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Views\User\" />
   </ItemGroup>
 
 </Project>

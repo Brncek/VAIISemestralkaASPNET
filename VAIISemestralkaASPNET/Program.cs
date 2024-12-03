@@ -105,7 +105,7 @@ namespace VAIISemestralkaASPNET
             {
                 adminUser = new IdentityUser
                 {
-                    UserName = adminEmail,
+                    UserName = "admin",
                     Email = adminEmail,
                     EmailConfirmed = true 
                 };

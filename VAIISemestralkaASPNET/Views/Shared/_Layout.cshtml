@@ -10,6 +10,8 @@
 
     <script src="/lib/mineBootstrap/js/bootstrap.min.js"></script>
 
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+
     <link rel="stylesheet" href="~/css/font.css" asp-append-version="true" />
 
     <link href="/css/common.css" rel="stylesheet">
@@ -42,6 +44,10 @@
                             <li class="nav-item ">
                                 <a class="nav-link navWhiteText" asp-area="" asp-controller="Garage" asp-action="Index">Garage</a>
                             </li>
+
+                            <li class="nav-item ">
+                                <a class="nav-link navWhiteText" asp-area="" asp-controller="" asp-action="Index">Orders</a>
+                            </li>
                         }
 
                         @if (User.IsInRole("Manager"))
@@ -49,12 +55,43 @@
                             <li class="nav-item ">
                                 <a class="nav-link navWhiteText" asp-area="" asp-controller="Garage" asp-action="Index">Cars</a>
                             </li>
+
+                            <li class="nav-item ">
+                                <a class="nav-link navWhiteText" asp-area="" asp-controller="" asp-action="Index">Orders</a>
+                            </li>
+
+                            <li class="nav-item ">
+                                <a class="nav-link navWhiteText" asp-area="" asp-controller="" asp-action="Index">Employees</a>
+                            </li>
+
+                            <li class="nav-item ">
+                                <a class="nav-link navWhiteText" asp-area="" asp-controller="" asp-action="Index">Opening hours</a>
+                            </li>
                         }
 
                         @if (User.IsInRole("Admin"))
                         {
                             <li class="nav-item ">
-                                <a class="nav-link navWhiteText" asp-area="" asp-controller="Garage" asp-action="Index">Garages</a>
+                                <a class="nav-link navWhiteText" asp-area="" asp-controller="Garage" asp-action="Index">Cars</a>
+                            </li>
+
+                            <li class="nav-item ">
+                                <a class="nav-link navWhiteText" asp-area="" asp-controller="Admin" asp-action="Index">Users</a>
+                            </li>
+
+                            <li class="nav-item ">
+                                <a class="nav-link navWhiteText" asp-area="" asp-controller="" asp-action="Index">Orders</a>
+                            </li>
+                        }
+
+                        @if (User.IsInRole("Mechanic"))
+                        {
+                            <li class="nav-item ">
+                                <a class="nav-link navWhiteText" asp-area="" asp-controller="Garage" asp-action="Index">Cars</a>
+                            </li>
+
+                            <li class="nav-item ">
+                                <a class="nav-link navWhiteText" asp-area="" asp-controller="" asp-action="Index">Orders</a>
                             </li>
                         }
 
@@ -82,7 +119,7 @@
             <p class="copyright">© 2024 Sakala Benjamin in Zilina</p>
         </div>
     </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>

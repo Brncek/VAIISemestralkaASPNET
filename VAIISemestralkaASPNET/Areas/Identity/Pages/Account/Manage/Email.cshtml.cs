@@ -108,33 +108,36 @@ namespace VAIISemestralkaASPNET.Areas.Identity.Pages.Account.Manage
 
             if (!ModelState.IsValid)
             {
-                await LoadAsync(user);
+                await LoadAsync(user); 
                 return Page();
             }
 
             var email = await _userManager.GetEmailAsync(user);
             if (Input.NewEmail != email)
             {
-                var userId = await _userManager.GetUserIdAsync(user);
-                var code = await _userManager.GenerateChangeEmailTokenAsync(user, Input.NewEmail);
-                code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-                var callbackUrl = Url.Page(
-                    "/Account/ConfirmEmailChange",
-                    pageHandler: null,
-                    values: new { area = "Identity", userId = userId, email = Input.NewEmail, code = code },
-                    protocol: Request.Scheme);
-                await _emailSender.SendEmailAsync(
-                    Input.NewEmail,
-                    "Confirm your email",
-                    $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                user.Email = Input.NewEmail;
+                user.NormalizedEmail = Input.NewEmail.ToUpper(); 
+                var result = await _userManager.UpdateAsync(user);
 
-                StatusMessage = "Confirmation link to change email sent. Please check your email.";
+                if (!result.Succeeded)
+                {
+                    foreach (var error in result.Errors)
+                    {
+                        ModelState.AddModelError(string.Empty, error.Description);
+                    }
+
+                    await LoadAsync(user);
+                    return Page();
+                }
+
+                StatusMessage = "Your email has been updated.";
                 return RedirectToPage();
             }
 
             StatusMessage = "Your email is unchanged.";
             return RedirectToPage();
         }
+
 
         public async Task<IActionResult> OnPostSendVerificationEmailAsync()
         {
