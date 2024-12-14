@@ -29,7 +29,7 @@ namespace VAIISemestralkaASPNET.Controllers
         [Authorize]
         public async Task<IActionResult> Index()
         {
-            if(User.IsInRole("Admin")) {
+            if(User.IsInRole("Admin") || User.IsInRole("Manager") || User.IsInRole("Mechanic")) {
                 var cars = _context.Car.Include(c => c.User).ToListAsync();
                 return View(await cars);
             }
@@ -193,5 +193,6 @@ namespace VAIISemestralkaASPNET.Controllers
         {
             return _context.Car.Any(e => e.Id == id);
         }
+
     }
 }

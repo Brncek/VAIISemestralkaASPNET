@@ -11,7 +11,7 @@
                         $('#user-row-' + userId).remove();
                         console.log("User deleted successfully.");
                     } else {
-                        alert(response.message || 'Failed to delete user.');
+                        alert('Failed to delete user.');
                     }
                 },
                 error: function () {

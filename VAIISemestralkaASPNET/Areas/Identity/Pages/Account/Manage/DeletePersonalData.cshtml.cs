@@ -4,11 +4,10 @@
 
 using System;
 using System.ComponentModel.DataAnnotations;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.Extensions.Logging;
+using VAIISemestralkaASPNET.Data;
 
 namespace VAIISemestralkaASPNET.Areas.Identity.Pages.Account.Manage
 {
@@ -17,15 +16,18 @@ namespace VAIISemestralkaASPNET.Areas.Identity.Pages.Account.Manage
         private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly ILogger<DeletePersonalDataModel> _logger;
+        private readonly ApplicationDbContext _context;
 
         public DeletePersonalDataModel(
             UserManager<IdentityUser> userManager,
             SignInManager<IdentityUser> signInManager,
-            ILogger<DeletePersonalDataModel> logger)
+            ILogger<DeletePersonalDataModel> logger,
+            ApplicationDbContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
+            _context = context;
         }
 
         /// <summary>
@@ -86,8 +88,10 @@ namespace VAIISemestralkaASPNET.Areas.Identity.Pages.Account.Manage
                 }
             }
 
-            var result = await _userManager.DeleteAsync(user);
             var userId = await _userManager.GetUserIdAsync(user);
+            await DeleteAllCarsByUserIdAsync(userId);
+
+            var result = await _userManager.DeleteAsync(user);
             if (!result.Succeeded)
             {
                 throw new InvalidOperationException($"Unexpected error occurred deleting user.");
@@ -99,5 +103,34 @@ namespace VAIISemestralkaASPNET.Areas.Identity.Pages.Account.Manage
 
             return Redirect("~/");
         }
+
+        public async Task DeleteAllCarsByUserIdAsync(string userId)
+        {
+            if (string.IsNullOrEmpty(userId))
+            {
+                throw new ArgumentException("User ID cannot be null or empty.", nameof(userId));
+            }
+
+            try
+            {
+                var userCars = _context.Car.Where(c => c.UserId == userId);
+
+                if (!userCars.Any())
+                {
+                    return;
+                }
+
+                _context.Car.RemoveRange(userCars);
+
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException("An error occurred while deleting cars.", ex);
+            }
+        }
+
+
+
     }
 }

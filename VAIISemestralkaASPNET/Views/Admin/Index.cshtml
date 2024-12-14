@@ -1,43 +1,53 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @model List<(IdentityUser User, IList<string> Roles)>
 
-<h2>Manage Users</h2>
+<link href="~/css/listCommon.css" rel="stylesheet" />
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>Username</th>
-            <th>Roles</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var user in Model)
-        {
-            <tr id="user-row-@user.User.Id">
-                <td>@user.User.UserName</td>
-                <td>
-                    @foreach (var role in user.Roles)
-                    {
-                        <span class="badge bg-primary">@role</span>
-                    }
-                </td>
 
-                <td>
-                    <button class="btn btn-danger delete-user"
-                            data-user-id="@user.User.Id">
-                        Delete
-                    </button>
-                </td>
+<div class="container content">
+    <h2>Manage Users</h2>
 
-                <td>
-                    <a asp-action="EditRoles"
-                       asp-route-userId="@user.User.Id"
-                       class="btn btn-warning edit-roles">Edit Roles</a>
-                </td>
+
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Username</th>
+                <th>Roles</th>
+                <th>Actions</th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var user in Model)
+            {
+                <tr id="user-row-@user.User.Id">
+                    <td>@user.User.UserName</td>
+                    <td>
+                        @foreach (var role in user.Roles)
+                        {
+                            <span class="badge bg-primary">@role</span>
+                        }
+                    </td>
+
+                    <td>
+                        <a asp-action="EditRoles"
+                           asp-route-userId="@user.User.Id"
+                           class="btn btn-outline-success ">Edit Roles</a>
+                    </td>
+
+                    <td>
+                        <button class="btn btn-danger delete-user"
+                                data-user-id="@user.User.Id">
+                            Delete
+                        </button>
+                    </td>
+
+                
+                </tr>
+            }
+        </tbody>
+    </table>
+
+</div>
 
 <script src="~/js/adminindex.js"></script>

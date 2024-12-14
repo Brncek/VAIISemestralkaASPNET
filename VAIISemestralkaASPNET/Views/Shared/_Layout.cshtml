@@ -19,7 +19,7 @@
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <nav class="navbar navbar-expand-xl bg-body-tertiary">
             <div class="container-fluid">
                 <a class="navbar-brand-custom" asp-area="" asp-controller="Home" asp-action="Index"><img class="logo" src="/res/LogoServis.png" alt="Logo"></a>
                 <div class="navbar-toggler-custom">
@@ -31,26 +31,23 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
 
-                        <li class="nav-item ">
-                            <a class="nav-link navWhiteText" asp-area="" asp-controller="Home" asp-action="Contacts">Contacts</a>
-                        </li>
-
-                        <li class="nav-item ">
-                            <a class="nav-link navWhiteText" asp-area="" asp-controller="Home" asp-action="Reservations">Reservations</a>
-                        </li>
+                        
 
                         @if (User.IsInRole("User"))
                         {
                             <li class="nav-item ">
-                                <a class="nav-link navWhiteText" asp-area="" asp-controller="Garage" asp-action="Index">Garage</a>
+                                <a class="nav-link navWhiteText" asp-area="" asp-controller="Home" asp-action="Contacts">Contacts</a>
                             </li>
 
                             <li class="nav-item ">
-                                <a class="nav-link navWhiteText" asp-area="" asp-controller="" asp-action="Index">Orders</a>
+                                <a class="nav-link navWhiteText" asp-area="" asp-controller="Home" asp-action="Reservations">Reservations</a>
                             </li>
-                        }
 
-                        @if (User.IsInRole("Manager"))
+                            <li class="nav-item ">
+                                <a class="nav-link navWhiteText" asp-area="" asp-controller="Garage" asp-action="Index">Garage</a>
+                            </li>
+
+                        } else if (User.IsInRole("Manager"))
                         {
                             <li class="nav-item ">
                                 <a class="nav-link navWhiteText" asp-area="" asp-controller="Garage" asp-action="Index">Cars</a>
@@ -61,15 +58,13 @@
                             </li>
 
                             <li class="nav-item ">
-                                <a class="nav-link navWhiteText" asp-area="" asp-controller="" asp-action="Index">Employees</a>
+                                <a class="nav-link navWhiteText" asp-area="" asp-controller="" asp-action="Index">Services</a>
                             </li>
 
                             <li class="nav-item ">
-                                <a class="nav-link navWhiteText" asp-area="" asp-controller="" asp-action="Index">Opening hours</a>
+                                <a class="nav-link navWhiteText" asp-area="" asp-controller="" asp-action="Index">Opening Hours</a>
                             </li>
-                        }
-
-                        @if (User.IsInRole("Admin"))
+                        } else if (User.IsInRole("Admin"))
                         {
                             <li class="nav-item ">
                                 <a class="nav-link navWhiteText" asp-area="" asp-controller="Garage" asp-action="Index">Cars</a>
@@ -82,9 +77,15 @@
                             <li class="nav-item ">
                                 <a class="nav-link navWhiteText" asp-area="" asp-controller="" asp-action="Index">Orders</a>
                             </li>
-                        }
 
-                        @if (User.IsInRole("Mechanic"))
+                            <li class="nav-item ">
+                                <a class="nav-link navWhiteText" asp-area="" asp-controller="" asp-action="Index">Services</a>
+                            </li>
+
+                            <li class="nav-item ">
+                                <a class="nav-link navWhiteText" asp-area="" asp-controller="" asp-action="Index">Opening Hours</a>
+                            </li>
+                        } else if (User.IsInRole("Mechanic"))
                         {
                             <li class="nav-item ">
                                 <a class="nav-link navWhiteText" asp-area="" asp-controller="Garage" asp-action="Index">Cars</a>
@@ -92,6 +93,19 @@
 
                             <li class="nav-item ">
                                 <a class="nav-link navWhiteText" asp-area="" asp-controller="" asp-action="Index">Orders</a>
+                            </li>
+
+                            <li class="nav-item ">
+                                <a class="nav-link navWhiteText" asp-area="" asp-controller="" asp-action="Index">Services</a>
+                            </li>
+                        } else
+                        {
+                            <li class="nav-item ">
+                                <a class="nav-link navWhiteText" asp-area="" asp-controller="Home" asp-action="Contacts">Contacts</a>
+                            </li>
+
+                            <li class="nav-item ">
+                                <a class="nav-link navWhiteText" asp-area="" asp-controller="Home" asp-action="Reservations">Reservations</a>
                             </li>
                         }
 

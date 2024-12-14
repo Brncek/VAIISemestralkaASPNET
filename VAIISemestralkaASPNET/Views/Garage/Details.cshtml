@@ -11,7 +11,7 @@
 <div class="container">
     <h3> @Model.Name </h3>
     <hr/>
-    <dl class="row">
+    <dl class="row  ">
         @foreach (var line in await VINAPI.GetInfos(Model.VIN))
         {
             <div class="register-form">

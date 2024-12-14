@@ -1,6 +1,10 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
+using VAIISemestralkaASPNET.Data;
 
 namespace VAIISemestralkaASPNET.Controllers
 {
@@ -8,11 +12,13 @@ namespace VAIISemestralkaASPNET.Controllers
     {
         private readonly UserManager<IdentityUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly ApplicationDbContext _context;
 
-        public AdminController(UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager)
+        public AdminController(UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager, ApplicationDbContext context)
         {
             _userManager = userManager;
             _roleManager = roleManager;
+            _context = context;
         }
 
 
@@ -39,6 +45,7 @@ namespace VAIISemestralkaASPNET.Controllers
             var user = await _userManager.FindByIdAsync(id);
             if (user != null)
             {
+                await DeleteAllCarsByUserIdAsync(id);
                 await _userManager.DeleteAsync(user);
                 return Json(new { success = true });
             }
@@ -92,13 +99,46 @@ namespace VAIISemestralkaASPNET.Controllers
                 return NotFound();
             }
 
+            foreach (var item in roles)
+            {
+                if (item == "Admin")
+                {
+                    return NotFound();
+                }
+            }
+
             var currentRoles = await _userManager.GetRolesAsync(user);
-            await _userManager.RemoveFromRolesAsync(user, currentRoles); // Remove existing roles
-            await _userManager.AddToRolesAsync(user, roles); // Assign new roles
+            await _userManager.RemoveFromRolesAsync(user, currentRoles);
+            await _userManager.AddToRolesAsync(user, roles); 
 
             return RedirectToAction("Index");
         }
 
+        public async Task DeleteAllCarsByUserIdAsync(string userId)
+        {
+            if (string.IsNullOrEmpty(userId))
+            {
+                throw new ArgumentException("User ID cannot be null or empty.", nameof(userId));
+            }
+
+            try
+            {
+                var userCars = _context.Car.Where(c => c.UserId == userId);
+
+                if (!userCars.Any())
+                {
+                    return;
+                }
+
+                _context.Car.RemoveRange(userCars);
+
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException("An error occurred while deleting cars.", ex);
+            }
+        }
 
 
 
