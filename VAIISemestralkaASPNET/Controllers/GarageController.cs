@@ -11,6 +11,7 @@ using VAIISemestralkaASPNET.Data;
 using VAIISemestralkaASPNET.Models;
 using VAIISemestralkaASPNET.App;
 using System.Text.Json;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace VAIISemestralkaASPNET.Controllers
 {
@@ -25,7 +26,6 @@ namespace VAIISemestralkaASPNET.Controllers
             _userManager = userManager;
         }
 
-        // GET: Garage
         [Authorize]
         public async Task<IActionResult> Index()
         {
@@ -42,7 +42,6 @@ namespace VAIISemestralkaASPNET.Controllers
             
         }
 
-        // GET: Garage/Details/5
         [Authorize]
         public async Task<IActionResult> Details(int? id)
         {
@@ -62,7 +61,6 @@ namespace VAIISemestralkaASPNET.Controllers
             return View(car);
         }
 
-        // GET: Garage/Create
         [Authorize]
         public IActionResult Create()
         {
@@ -70,11 +68,9 @@ namespace VAIISemestralkaASPNET.Controllers
             return View();
         }
 
-        // POST: Garage/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> Create([Bind("Id,Name,VIN,UserId")] Car car)
         {
             VINDetails? carDetails = await VINAPI.GetVinDetailsAsync(car.VIN.ToUpper());
@@ -101,7 +97,6 @@ namespace VAIISemestralkaASPNET.Controllers
           
         }
 
-        // GET: Garage/Edit/5
         [Authorize]
         public async Task<IActionResult> Edit(int? id)
         {
@@ -119,9 +114,7 @@ namespace VAIISemestralkaASPNET.Controllers
             return View(car);
         }
 
-        // POST: Garage/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
@@ -132,11 +125,17 @@ namespace VAIISemestralkaASPNET.Controllers
                 return NotFound();
             }
 
-            car.UserId = _userManager.GetUserId(User)!;
+            var user = await _userManager.GetUserAsync(User);
+            var userId = await _userManager.GetUserIdAsync(user);
+
             try
             {
+                if (User.IsInRole("Admin") || User.IsInRole("Mechanic") || User.IsInRole("Manager") || car.UserId == userId)
+                {
                     _context.Update(car);
-                    await _context.SaveChangesAsync();
+                }
+                
+                await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -153,7 +152,6 @@ namespace VAIISemestralkaASPNET.Controllers
           
         }
 
-        // GET: Garage/Delete/5
         [Authorize]
         public async Task<IActionResult> Delete(int? id)
         {
@@ -173,16 +171,23 @@ namespace VAIISemestralkaASPNET.Controllers
             return View(car);
         }
 
-        // POST: Garage/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         [Authorize]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var car = await _context.Car.FindAsync(id);
+
             if (car != null)
             {
-                _context.Car.Remove(car);
+                var user = await _userManager.GetUserAsync(User);
+                var userId = await _userManager.GetUserIdAsync(user);
+
+                if ( User.IsInRole("Admin")  || User.IsInRole("Mechanic") || User.IsInRole("Manager") || car.UserId == userId)
+                {
+                    _context.Car.Remove(car);
+
+                }
             }
 
             await _context.SaveChangesAsync();

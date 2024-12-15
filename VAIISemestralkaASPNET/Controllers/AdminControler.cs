@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -22,6 +23,7 @@ namespace VAIISemestralkaASPNET.Controllers
         }
 
 
+        [Authorize (Roles = "Admin")]
         public async Task<IActionResult> Index()
         {
             var users = _userManager.Users.ToList();
@@ -40,6 +42,7 @@ namespace VAIISemestralkaASPNET.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(string id)
         {
             var user = await _userManager.FindByIdAsync(id);
@@ -52,6 +55,7 @@ namespace VAIISemestralkaASPNET.Controllers
             return Json(new { success = false, message = "User not found." });
         }
 
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> AssignRoles(string userId, List<string> roles)
         {
             var user = await _userManager.FindByIdAsync(userId);
@@ -65,6 +69,7 @@ namespace VAIISemestralkaASPNET.Controllers
             return RedirectToAction("Index");
         }
 
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> EditRoles(string userId)
         {
             var user = await _userManager.FindByIdAsync(userId);
@@ -91,6 +96,7 @@ namespace VAIISemestralkaASPNET.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> UpdateRoles(string userId, List<string> roles)
         {
             var user = await _userManager.FindByIdAsync(userId);
@@ -114,6 +120,7 @@ namespace VAIISemestralkaASPNET.Controllers
             return RedirectToAction("Index");
         }
 
+        [Authorize(Roles = "Admin")]
         public async Task DeleteAllCarsByUserIdAsync(string userId)
         {
             if (string.IsNullOrEmpty(userId))

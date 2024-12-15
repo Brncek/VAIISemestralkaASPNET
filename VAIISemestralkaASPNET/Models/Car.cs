@@ -18,7 +18,9 @@ namespace VAIISemestralkaASPNET.Models
 
         public Car()
         {
-
+            Name = string.Empty;
+            VIN = string.Empty;
+            UserId = string.Empty;
         }
     }
 }

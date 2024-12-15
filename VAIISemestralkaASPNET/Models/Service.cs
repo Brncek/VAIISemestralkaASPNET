@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
 
 namespace VAIISemestralkaASPNET.Models
 {
@@ -7,12 +8,19 @@ namespace VAIISemestralkaASPNET.Models
         public int Id { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndtDate { get; set; }
+
+        public int? CarID { get; set; }
+
+        [ForeignKey("CarID")]
+        public Car Car { get; set; }
+
         public string VIN { get; set; }
 
         public int WorkTime { get; set; }
-        public string ServiceImages { get; set; }
+        public string ServiceImagesLocation { get; set; }
         public string ServisesDone { get; set; }
 
+        [Required]
         public int OrderId { get; set; }
 
         [ForeignKey("OrderId")]
@@ -21,7 +29,7 @@ namespace VAIISemestralkaASPNET.Models
         public Service()
         {
             VIN = string.Empty;
-            ServiceImages = string.Empty;
+            ServiceImagesLocation = string.Empty;
             ServisesDone = string.Empty;
         }
     }

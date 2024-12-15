@@ -9,8 +9,16 @@ namespace VAIISemestralkaASPNET.Models
         public int Id { get; set; }
 
         public DateTime Date { get; set; }
+
+        public int? CarID { get; set; }
+
+        [ForeignKey("CarID")]
+        public Car Car { get; set; }
+
         public string VIN { get; set; }
         public string ServiseInfo { get; set; }
+
+        public string State { get; set; }
 
         [Required]
         public string UserId { get; set; }
@@ -22,6 +30,8 @@ namespace VAIISemestralkaASPNET.Models
         {
             VIN = string.Empty;
             ServiseInfo = string.Empty; 
+            State = string.Empty;
+            UserId = string.Empty;
         }
     }
 }

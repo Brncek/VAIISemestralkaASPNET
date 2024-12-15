@@ -27,7 +27,7 @@ namespace VAIISemestralkaASPNET
                 options.Password.RequireUppercase = false;
                 options.Password.RequiredLength = 4; 
             })
-                .AddRoles<IdentityRole>() // Add this line to enable role management
+                .AddRoles<IdentityRole>() 
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
             builder.Services.AddControllersWithViews();
@@ -35,7 +35,6 @@ namespace VAIISemestralkaASPNET
 
             var app = builder.Build();
 
-            // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
                 app.UseMigrationsEndPoint();
@@ -43,7 +42,6 @@ namespace VAIISemestralkaASPNET
             else
             {
                 app.UseExceptionHandler("/Home/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
 

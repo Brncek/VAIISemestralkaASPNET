@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using VAIISemestralkaASPNET.Models;
+using VAIISemestralkaASPNET.App;
+using System;
 
 namespace VAIISemestralkaASPNET.Controllers
 {
@@ -38,6 +40,19 @@ namespace VAIISemestralkaASPNET.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+        public String Dates() //TODO REMOVE
+        {
+            
+            String dates = "";
+
+            foreach (var date in DateGetter.NextDates())
+            {
+                dates += date.ToString("dd.MM.yyyy") + " ";
+            }
+
+            return dates;
         }
     }
 }
