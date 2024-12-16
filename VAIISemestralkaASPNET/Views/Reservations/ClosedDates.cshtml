@@ -1,0 +1,34 @@
+﻿@model IEnumerable<VAIISemestralkaASPNET.Models.ClosedDate>
+
+@{
+    ViewData["Title"] = "ClosedDates";
+    //TODO CSS
+}
+
+<h1>ClosedDates</h1>
+
+<p>
+    <a asp-action="ClosedDatesCreate">Add date</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Closed)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Closed)
+            </td>
+            <td>
+                    <a asp-action="ClosedDatesDelete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

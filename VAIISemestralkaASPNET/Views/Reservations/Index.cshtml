@@ -1,0 +1,82 @@
+﻿@using VAIISemestralkaASPNET.App
+@model IEnumerable<(string Date, List<(string State, int Index)> blocks)>
+@{
+    ViewData["Title"] = "Reservations";
+}
+
+<H1>Reservations</H1>
+<p>For later dates reservations please contact us via e-mail or call us.</p>
+
+<link href="/css/reservation.css" rel="stylesheet">
+<link href="/css/calendar.css" rel="stylesheet">
+
+<div class="box">
+    <div class="calendar">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="schedule-table">
+                    <table class="table bg-white">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                @for(int i = 0; i < CONSTANTS.CALENDAR_START_HOURS.Length; i++)
+                                {
+                                    int time = CONSTANTS.CALENDAR_START_HOURS[i];
+                                    string timeString = $"{time}:00 - {time + 2}:00";
+                                    if (i < CONSTANTS.CALENDAR_START_HOURS.Length - 1)
+                                    {
+                                        <th>@timeString</th>
+                                    } else
+                                    {
+                                        <th class="last">@timeString</th>
+                                    }
+                                }
+                            
+                            </tr>
+                        </thead>
+
+
+                        <tbody>
+                            @foreach (var line in Model)
+                            {
+                                <tr>
+                                    <td class="day">@line.Date</td>
+
+                                    @foreach (var block in line.blocks)
+                                    {
+                                        @if (block.State == CONSTANTS.CALENDAR_FULL)
+                                        {
+                                            <td class="active full">
+                                                <h4 class="full">Full</h4>
+                                                <div class="hover full">
+                                                    <h4>Maybe try later</h4>
+                                                </div>
+                                            </td>
+                                        }
+                                        else if (block.State == CONSTANTS.CALENDAR_CLOSED)
+                                        {
+                                            <td class="closed">
+                                                <h4 class="closed">Closed</h4>
+                                            </td>
+                                        }
+                                        else  //TODO:FORM RESERVATE
+                                        {
+                                            <td class="active available">
+                                                <h4 class="available">Available</h4>
+                                                <div class="hover available">
+                                                    <h4>Reserve now!</h4>
+                                                    <button class="reserve-button">Reserve</button>
+                                                </div>
+                                            </td>
+                                        }
+                                    }
+
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

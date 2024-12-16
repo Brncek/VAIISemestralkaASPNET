@@ -1,0 +1,42 @@
+﻿@using VAIISemestralkaASPNET.App
+@model VAIISemestralkaASPNET.Models.NonDBDataHolders.ClosedDateForm
+
+@{
+    ViewData["Title"] = "ClosedDatesCreate";
+    //TODO CSS
+}
+
+<h1>ClosedDatesCreate</h1>
+
+<h4>ClosedDate</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="ClosedDatesCreate">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Closed" class="control-label"></label>
+                <input asp-for="Closed" class="form-control" />
+                <span asp-validation-for="Closed" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Hour" class="control-label"></label>
+                @foreach (var time in CONSTANTS.CALENDAR_START_HOURS)
+                {
+                    <div>
+                        <input type="radio" id="hour_@time" name="Hour" value="@time" />
+                        <label for="hour_@time">@time</label>
+                    </div>
+                }
+                <span asp-validation-for="Hour" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="ClosedDatesCreate" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+

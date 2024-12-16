@@ -25,12 +25,6 @@ namespace VAIISemestralkaASPNET.Controllers
             return View();
         }
 
-
-        public IActionResult Reservations()
-        {
-            return View();
-        }
-
         public IActionResult Tester()
         {
             return View();
@@ -40,19 +34,6 @@ namespace VAIISemestralkaASPNET.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
-
-        public String Dates() //TODO REMOVE
-        {
-            
-            String dates = "";
-
-            foreach (var date in DateGetter.NextDates())
-            {
-                dates += date.ToString("dd.MM.yyyy") + " ";
-            }
-
-            return dates;
         }
     }
 }

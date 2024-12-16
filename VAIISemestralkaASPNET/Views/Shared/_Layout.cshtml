@@ -40,7 +40,7 @@
                             </li>
 
                             <li class="nav-item ">
-                                <a class="nav-link navWhiteText" asp-area="" asp-controller="Home" asp-action="Reservations">Reservations</a>
+                                <a class="nav-link navWhiteText" asp-area="" asp-controller="Reservations" asp-action="Index">Reservations</a>
                             </li>
 
                             <li class="nav-item ">
@@ -62,7 +62,7 @@
                             </li>
 
                             <li class="nav-item ">
-                                <a class="nav-link navWhiteText" asp-area="" asp-controller="" asp-action="Index">Opening Hours</a>
+                                <a class="nav-link navWhiteText" asp-area="" asp-controller="Reservations" asp-action="ClosedDates">Opening Hours</a>
                             </li>
                         } else if (User.IsInRole("Admin"))
                         {
@@ -83,7 +83,7 @@
                             </li>
 
                             <li class="nav-item ">
-                                <a class="nav-link navWhiteText" asp-area="" asp-controller="" asp-action="Index">Opening Hours</a>
+                                <a class="nav-link navWhiteText" asp-area="" asp-controller="Reservations" asp-action="ClosedDates">Opening Hours</a>
                             </li>
                         } else if (User.IsInRole("Mechanic"))
                         {
@@ -105,7 +105,7 @@
                             </li>
 
                             <li class="nav-item ">
-                                <a class="nav-link navWhiteText" asp-area="" asp-controller="Home" asp-action="Reservations">Reservations</a>
+                                <a class="nav-link navWhiteText" asp-area="" asp-controller="Reservations" asp-action="Index" >Reservations</a>
                             </li>
                         }
 

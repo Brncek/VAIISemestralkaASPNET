@@ -64,7 +64,6 @@ namespace VAIISemestralkaASPNET.Controllers
         [Authorize]
         public IActionResult Create()
         {
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id");
             return View();
         }
 
@@ -163,6 +162,7 @@ namespace VAIISemestralkaASPNET.Controllers
             var car = await _context.Car
                 .Include(c => c.User)
                 .FirstOrDefaultAsync(m => m.Id == id);
+
             if (car == null)
             {
                 return NotFound();
