@@ -1,0 +1,54 @@
+﻿@using VAIISemestralkaASPNET.App
+@model VAIISemestralkaASPNET.Models.Order
+
+@{
+    ViewData["Title"] = "Edit";
+    //TODO: DATE TIME
+}
+
+<link href="/css/form.css" rel="stylesheet">
+
+<div class="form-container">
+    <form asp-action="Edit" class="d-flex register-form">
+        <hr />
+        <ul>
+            <h3>Edit order</h3>
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <div class="form-floating mb-3">
+                <input asp-for="Date" class="form-control" />
+                <label asp-for="Date" class="control-label"></label>
+                <span asp-validation-for="Date" class="text-danger"></span>
+            </div>
+            <div class="form-floating mb-3">
+                <select asp-for="CarID" class="form-control" asp-items="ViewBag.CarID"></select>
+                <label asp-for="CarID" class="control-label"></label>
+                <span asp-validation-for="CarID" class="text-danger"></span>
+            </div>
+            <div class="form-floating mb-3">
+                <input asp-for="VIN" class="form-control" />
+                <label asp-for="VIN" class="control-label"></label>
+                <span asp-validation-for="VIN" class="text-danger"></span>
+            </div>
+            <div class="form-floating mb-3">
+                <input asp-for="ServiseInfo" class="form-control" />
+                <label asp-for="ServiseInfo" class="control-label"></label>
+                <span asp-validation-for="ServiseInfo" class="text-danger"></span>
+            </div>
+            @foreach (var state in CONSTANTS.ORDER_STATES())
+            {
+                <div>
+                    <label class="control-label">@state</label>
+                    <input type="radio" name="State" value="@state" @(Model.State == state ? "checked" : "") />
+                </div>
+            }
+
+            <hr />
+
+            <div class="form-floating mb-3">
+                <input type="submit" value="Save" class="w-100 btn btn-lg btn-primary" />
+            </div>
+        </ul>
+    </form>
+</div>
+

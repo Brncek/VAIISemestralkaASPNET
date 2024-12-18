@@ -9,6 +9,8 @@
 <link href="~/css/form.css" rel="stylesheet" />
 <link href="~/css/listCommon.css" rel="stylesheet" />
 
+<h1>Cars</h1>
+
 @if (!User.IsInRole("Admin"))
 {
     <div class="d-flex justify-content-center align-items-center">
@@ -56,26 +58,23 @@
                     }
 
                     <td>
-                        <div class="row">
-                            <div class="col-md-4">
-                                <form asp-action="Edit" method="get" asp-route-id="@item.Id">
-                                    <button type="submit" class="btn btn-outline-success buttonMargin">Edit</button>
-                                </form>
-                            </div>
-
-                            <div class="col-md-4">
-                                <form asp-action="Details" method="get" asp-route-id="@item.Id">
-                                    <button type="submit" class="btn btn-outline-success buttonMargin">Details</button>
-                                </form>
-                                </div>
-
-                             <div class="col-md-4">
-                                <form asp-action="Delete" method="get" asp-route-id="@item.Id">
-                                    <button type="submit" class="btn btn-outline-success buttonMargin">Delete</button>
-                                </form>
-                             </div>
+                        <div class="col-md-4">
+                            <form asp-action="Edit" method="get" asp-route-id="@item.Id">
+                                <button type="submit" class="btn btn-outline-success buttonMargin">Edit</button>
+                            </form>
                         </div>
-                        
+
+                        <div class="col-md-4">
+                            <form asp-action="Details" method="get" asp-route-id="@item.Id">
+                                <button type="submit" class="btn btn-outline-success buttonMargin">Details</button>
+                            </form>
+                        </div>
+
+                        <div class="col-md-4">
+                            <form asp-action="Delete" method="get" asp-route-id="@item.Id">
+                                <button type="submit" class="btn btn-outline-success buttonMargin">Delete</button>
+                            </form>
+                        </div>
                     </td>
                 </tr>
             }

@@ -59,13 +59,15 @@
                                                 <h4 class="closed">Closed</h4>
                                             </td>
                                         }
-                                        else  //TODO:FORM RESERVATE
+                                        else 
                                         {
                                             <td class="active available">
                                                 <h4 class="available">Available</h4>
                                                 <div class="hover available">
                                                     <h4>Reserve now!</h4>
-                                                    <button class="reserve-button">Reserve</button>
+                                                    <form asp-action="ReservationCreate" method="get" asp-route-id="@block.Index">
+                                                        <button type="submit" class="reserve-button" >Reserve</button>
+                                                    </form>
                                                 </div>
                                             </td>
                                         }

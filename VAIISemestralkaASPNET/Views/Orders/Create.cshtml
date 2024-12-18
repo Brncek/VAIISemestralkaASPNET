@@ -1,0 +1,38 @@
+﻿@model VAIISemestralkaASPNET.Models.Order
+
+@{
+    ViewData["Title"] = "Create new order";
+}
+
+<link href="/css/form.css" rel="stylesheet">
+
+
+<div class="form-container">
+    <form asp-action="Create" class="d-flex register-form">
+        <hr />
+        <ul>
+            <h4>New order</h4>
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-floating mb-3">
+                <input asp-for="Date" class="form-control" />
+                <label asp-for="Date" class="control-label"></label>
+                <span asp-validation-for="Date" class="text-danger"></span>
+            </div>
+            <div class="form-floating mb-3">
+                <input asp-for="VIN" class="form-control" />
+                <label asp-for="VIN" class="control-label"></label>
+                <span asp-validation-for="VIN" class="text-danger"></span>
+            </div>
+            <div class="form-floating mb-3">
+                <input asp-for="ServiseInfo" class="form-control" />
+                <label asp-for="ServiseInfo" class="control-label"></label>
+                <span asp-validation-for="ServiseInfo" class="text-danger"></span>
+            </div>
+            <div class="form-floating mb-3">
+                <input type="submit" value="Create" class="w-100 btn btn-lg btn-primary" />
+            </div>
+        </ul>
+    </form>
+</div>
+
+

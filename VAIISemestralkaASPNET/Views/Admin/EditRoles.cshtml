@@ -1,6 +1,10 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @model (IdentityUser User, IList<string> UserRoles, List<string> AllRoles)
 
+@{
+    ViewData["Title"] = "Delete user";
+}
+
 <link href="/css/form.css" rel="stylesheet">
 <link href="/css/editRoles.css" rel="stylesheet">
 
@@ -17,9 +21,9 @@
 
             @foreach (var role in Model.AllRoles)
             {
-                <div>>
-                    <input type="radio" name="roles" value="@role" @(Model.UserRoles.Contains(role) ? "checked" : "") />
-                    <label>@role</label>
+                <div>
+                    <input  type="radio" name="roles" value="@role" @(Model.UserRoles.Contains(role) ? "checked" : "") />
+                    <label class="whiteLable" >@role</label>
                 </div>
             }
             <button type="submit" class="w-100 btn btn-lg btn-primary marginTop1">Save</button>

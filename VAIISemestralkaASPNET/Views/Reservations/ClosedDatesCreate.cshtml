@@ -2,41 +2,45 @@
 @model VAIISemestralkaASPNET.Models.NonDBDataHolders.ClosedDateForm
 
 @{
-    ViewData["Title"] = "ClosedDatesCreate";
-    //TODO CSS
+    ViewData["Title"] = "Closed Date add";
 }
 
-<h1>ClosedDatesCreate</h1>
+<link href="/css/form.css" rel="stylesheet">
 
-<h4>ClosedDate</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="ClosedDatesCreate">
+
+<div class="form-container">
+    <form asp-action="ClosedDatesCreate" class="d-flex register-form">
+        <hr />
+        <ul>
+            <h3>Closed Date</h3>
+
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Closed" class="control-label"></label>
+            <div class="form-floating mb-3">
                 <input asp-for="Closed" class="form-control" />
+                <label asp-for="Closed" class="control-label"></label>
                 <span asp-validation-for="Closed" class="text-danger"></span>
             </div>
 
-            <div class="form-group">
-                <label asp-for="Hour" class="control-label"></label>
+            <div class ="form-floating mb-3">
+                <h5>Hours</h5>
+            </div>
+
+            <div class="form-floating mb-3">
                 @foreach (var time in CONSTANTS.CALENDAR_START_HOURS)
                 {
                     <div>
                         <input type="radio" id="hour_@time" name="Hour" value="@time" />
-                        <label for="hour_@time">@time</label>
+                        <label class="whiteLable" for="hour_@time">@time</label>
                     </div>
                 }
                 <span asp-validation-for="Hour" class="text-danger"></span>
             </div>
 
-            <div class="form-group">
-                <input type="submit" value="ClosedDatesCreate" class="btn btn-primary" />
+            <div class="form-floating mb-3">
+                <input type="submit" value="Add new" class="w-100 btn btn-lg btn-primary" />
             </div>
-        </form>
-    </div>
+        </ul>
+    </form>
 </div>
 
 

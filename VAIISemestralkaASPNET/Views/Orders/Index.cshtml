@@ -1,0 +1,114 @@
+﻿@model IEnumerable<VAIISemestralkaASPNET.Models.Order>
+
+@{
+    ViewData["Title"] = "Orders";
+}
+
+<link href="~/css/form.css" rel="stylesheet" />
+<link href="~/css/listCommon.css" rel="stylesheet" />
+
+<h1>Orders</h1>
+
+@if (User.IsInRole("Admin") || User.IsInRole("Mechanic") || User.IsInRole("Manager"))
+{
+    <div class="d-flex justify-content-center align-items-center">
+        <form asp-action="Create" method="get">
+            <button type="submit" class="btn buttonMargin btn-outline-success">New order</button>
+        </form>
+    </div>
+}
+
+
+<div class="container content">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Date)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Car)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.VIN)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.State)
+                </th>
+
+                @if (!User.IsInRole("User")) {
+                    <th>
+                        @Html.DisplayNameFor(model => model.User)
+                    </th>
+                }
+                
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @item.Date.ToString("dd.MM.yyyy HH:00");
+                    </td>
+                    <td>
+                        @if (item.Car != null)
+                        {
+                            @Html.DisplayFor(modelItem => item.Car.Name)
+                        }
+                    </td>
+                    <td>
+                        @if (item.Car != null)
+                        {
+                            @Html.DisplayFor(modelItem => item.Car.VIN)
+                        }
+                        else
+                        {
+                            @Html.DisplayFor(modelItem => item.VIN)
+                        }
+                    </td>
+                    <td>
+                        <span class="badge bg-primary">@item.State</span>
+                    </td>
+
+                    @if (!User.IsInRole("User"))
+                    {
+                        <td>
+                            @item.User.UserName
+                        </td>
+                    }
+                    
+                    <td>
+                        <div class="col-md-4">
+                            <form asp-action="Details" method="get" asp-route-id="@item.Id">
+                                <button type="submit" class="btn btn-outline-success buttonMargin">Details</button>
+                            </form>
+                        </div>
+
+                        @if (User.IsInRole("Admin") || User.IsInRole("Mechanic") || User.IsInRole("Manager"))
+                        {
+                            <div class="col-md-4">
+                                <form asp-action="Edit" method="get" asp-route-id="@item.Id">
+                                    <button type="submit" class="btn btn-outline-success buttonMargin">Edit</button>
+                                </form>
+                            </div>
+
+                            if (!User.IsInRole("Mechanic")) 
+                            {
+                                <div class="col-md-4">
+                                    <form asp-action="Delete" method="get" asp-route-id="@item.Id">
+                                        <button type="submit" class="btn btn-outline-success buttonMargin">Delete</button>
+                                    </form>
+                                </div>
+                            }
+                        }
+                        
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+</div>
+
