@@ -19,6 +19,10 @@ namespace VAIISemestralkaASPNET
                 options.UseSqlite(connectionString)); 
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
+            builder.WebHost.ConfigureKestrel(options =>
+            {
+                options.Configure(builder.Configuration.GetSection("Kestrel"));
+            });
 
             builder.Services.AddDefaultIdentity<IdentityUser>(options =>
             {
