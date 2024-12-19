@@ -112,13 +112,17 @@ namespace VAIISemestralkaASPNET.Areas.Identity.Pages.Account.Manage
 
             if (Input.Username != user.UserName)
             {
-                user.UserName = Input.Username; 
-                var setNameResult = await _userManager.UpdateAsync(user);
-                if (!setNameResult.Succeeded)
+                if(user.UserName != "Admin" && Input.Username != "Admin")
                 {
-                    StatusMessage = "Unexpected error when trying to set name.";
-                    return RedirectToPage();
+                    user.UserName = Input.Username;
+                    var setNameResult = await _userManager.UpdateAsync(user);
+                    if (!setNameResult.Succeeded)
+                    {
+                        StatusMessage = "Unexpected error when trying to set name.";
+                        return RedirectToPage();
+                    }
                 }
+                
             }
 
             await _signInManager.RefreshSignInAsync(user);

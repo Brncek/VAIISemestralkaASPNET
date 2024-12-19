@@ -59,3 +59,8 @@ ul {
 .marginTop1 {
     margin-top: 1em;
 }
+
+.button80Width {
+    width: 100%;
+    margin-bottom: 10px;
+}

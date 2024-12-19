@@ -3,7 +3,6 @@
 @{
     ViewData["Title"] = "Service Details";
     var images = ViewBag.Images as List<string>;
-    //TODO:: CSS -> DIFFERENT TEMPLATE
 }
 <link href="~/css/form.css" rel="stylesheet" />
 <link href="~/css/details.css" rel="stylesheet" />
@@ -52,7 +51,7 @@
             @if (User.IsInRole("Admin") || User.IsInRole("Manager") || User.IsInRole("Mechanic"))
             {
                 <div>
-                    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Edit</a>
+                    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary button80Width">Edit</a>
                 </div>
             }
 

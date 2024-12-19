@@ -32,7 +32,7 @@
                 <th>
                     @Html.DisplayNameFor(model => model.VIN)
                 </th>
-                @if (User.IsInRole("Admin"))
+                @if (User.IsInRole("Admin") || !User.IsInRole("Mechanic") || !User.IsInRole("Manager"))
                 {
                     <th>User name</th>
                 }

@@ -7,8 +7,6 @@
     var images = ViewBag.Images as List<(string FileName, string ImageUrl)>;
 
     var folderName = ViewBag.FolderName as string ?? "";
-
-    //TODO:: CSS -> DIFFERENT TEMPLATE
 }
 <link href="~/css/form.css" rel="stylesheet" />
 
@@ -73,11 +71,11 @@
                 <h4>Add New Images</h4>
                 <div class="form-group">
                     <input type="file" id="fileInput" multiple class="form-control mb-2" />
-                    <button type="button" id="uploadButton" class="btn btn-primary">Upload Images</button>
+                    <button type="button" id="uploadButton" class="btn btn-primary button80Width">Upload Images</button>
                 </div>
 
                 <div class="form-group">
-                    <button type="submit" class="btn btn-success">Save Changes</button>
+                    <button type="submit" class="btn btn-success button80Width">Save Changes</button>
                 </div>
 
             </form>

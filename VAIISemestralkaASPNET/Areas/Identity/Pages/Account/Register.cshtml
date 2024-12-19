@@ -9,7 +9,7 @@
 <div class="form-container">
     <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="d-flex register-form">
             <hr />
-            <ul class="list-form">
+            <ul>
                 <h3>Register</h3>
                 <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
                 <div class="form-floating mb-3">
@@ -29,7 +29,7 @@
                 </div>
                 <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
             </ul>
-        </form>
+    </form>
 </div>
 
 @section Scripts {
