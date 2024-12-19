@@ -127,10 +127,12 @@ namespace VAIISemestralkaASPNET.Controllers
             TimeSpan difference = service.EndtDate - service.StartDate;
             double minutesDifference = difference.TotalMinutes;
 
+            int Id = OrderId; 
+
             if (service.EndtDate <= service.StartDate || (int)Math.Ceiling(minutesDifference / 60) <= service.WorkTime 
                 || String.IsNullOrEmpty(service.ServisesDone))
             {
-                return RedirectToAction("Details", new { OrderId });
+                return RedirectToAction("Create", new { Id });
             }
 
             service.CarID = order.CarID;
@@ -194,7 +196,6 @@ namespace VAIISemestralkaASPNET.Controllers
 
             return View(service);
         }
-
 
         [HttpPost]
         [Authorize(Roles = "Admin, Mechanic, Manager")]
@@ -304,7 +305,6 @@ namespace VAIISemestralkaASPNET.Controllers
 			return RedirectToAction(nameof(Index));
 
 		}
-
 
 		[Authorize(Roles = "Admin, Mechanic, Manager")]
 		public async Task<IActionResult> Delete(int? id)

@@ -10,75 +10,78 @@
 
     //TODO:: CSS -> DIFFERENT TEMPLATE
 }
+<link href="~/css/form.css" rel="stylesheet" />
 
 <h1>Edit Service</h1>
 
-<div class="row">
-    <div class="col-md-8">
-        <form asp-action="Edit" method="post" enctype="multipart/form-data">
-            <input type="hidden" asp-for="Id" />
-            <input type="hidden" id="folderName" value="@folderName" />
+<div class="form_container_novh">
+    <div class="register-form-nolimit">
+        <ul>
+            <form asp-action="Edit" method="post" enctype="multipart/form-data">
+                <input type="hidden" asp-for="Id" />
+                <input type="hidden" id="folderName" value="@folderName" />
 
-            <div class="form-group">
-                <label asp-for="StartDate" class="control-label"></label>
-                <input asp-for="StartDate" class="form-control" type="datetime-local" required />
-                <span asp-validation-for="StartDate" class="text-danger"></span>
-            </div>
+                <div class="form-group">
+                    <label asp-for="StartDate" class="control-label whiteLable "></label>
+                    <input asp-for="StartDate" class="form-control" type="datetime-local" required />
+                    <span asp-validation-for="StartDate" class="text-danger"></span>
+                </div>
 
-            <div class="form-group">
-                <label asp-for="EndtDate" class="control-label"></label>
-                <input asp-for="EndtDate" class="form-control" type="datetime-local" required />
-                <span asp-validation-for="EndtDate" class="text-danger"></span>
-            </div>
+                <div class="form-group">
+                    <label asp-for="EndtDate" class="control-label whiteLable "></label>
+                    <input asp-for="EndtDate" class="form-control" type="datetime-local" required />
+                    <span asp-validation-for="EndtDate" class="text-danger"></span>
+                </div>
 
-            <div class="form-group">
-                <label asp-for="WorkTime" class="control-label"></label>
-                <input asp-for="WorkTime" class="form-control" required />
-                <span asp-validation-for="WorkTime" class="text-danger"></span>
-            </div>
+                <div class="form-group">
+                    <label asp-for="WorkTime" class="control-label whiteLable "></label>
+                    <input asp-for="WorkTime" class="form-control" required />
+                    <span asp-validation-for="WorkTime" class="text-danger"></span>
+                </div>
 
-            <div class="form-group">
-                <label asp-for="ServisesDone" class="control-label"></label>
-                <textarea asp-for="ServisesDone" class="form-control" required></textarea>
-                <span asp-validation-for="ServisesDone" class="text-danger"></span>
-            </div>
+                <div class="form-group">
+                    <label asp-for="ServisesDone" class="control-label whiteLable "></label>
+                    <textarea asp-for="ServisesDone" class="form-control" required></textarea>
+                    <span asp-validation-for="ServisesDone" class="text-danger"></span>
+                </div>
 
-            <h4>Images</h4>
-            <div id="image-container" class="row">
-                @if (images != null && images.Any())
+                <h4>Images</h4>
+                <div id="image-container" class="row">
+                    @if (images != null && images.Any())
 
-                {
-                    foreach (var image in images)
                     {
-                        <div class="col-md-3 text-center mb-3">
-                            <img src="@image.ImageUrl" class="img-thumbnail" />
-                            <button type="button" class="btn btn-danger btn-sm mt-2 delete-image"
-                                    data-folder="@folderName" data-file="@image.FileName">
-                                Delete
-                            </button>
-                        </div>
+                        foreach (var image in images)
+
+                        {
+                            <div class="col-md-3 text-center mb-3">
+                                <img src="@image.ImageUrl" class="img-thumbnail" />
+                                <button type="button" class="btn btn-danger btn-sm mt-2 delete-image"
+                                        data-folder="@folderName" data-file="@image.FileName">
+                                    Delete
+                                </button>
+                            </div>
+                        }
+
+                    }
+                    else
+                    {
+                        <p>No images</p>
                     }
 
-                }
+                </div>
 
-                else
+                <h4>Add New Images</h4>
+                <div class="form-group">
+                    <input type="file" id="fileInput" multiple class="form-control mb-2" />
+                    <button type="button" id="uploadButton" class="btn btn-primary">Upload Images</button>
+                </div>
 
-                {
-                    <p>No images available for this service.</p>
-                }
-            </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-success">Save Changes</button>
+                </div>
 
-            <h4>Add New Images</h4>
-            <div class="form-group">
-                <input type="file" id="fileInput" multiple class="form-control mb-2" />
-                <button type="button" id="uploadButton" class="btn btn-primary">Upload Images</button>
-            </div>
-
-            <div class="form-group">
-                <button type="submit" class="btn btn-success">Save Changes</button>
-            </div>
-
-        </form>
+            </form>
+        </ul>
     </div>
 </div>
 

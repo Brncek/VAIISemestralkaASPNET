@@ -8,7 +8,6 @@
 
             public string ServiseInfo { get; set; }
 
-
             public OrderForm()
             {
                 ServiseInfo = string.Empty;

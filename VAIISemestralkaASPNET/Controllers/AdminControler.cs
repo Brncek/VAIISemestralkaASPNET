@@ -23,7 +23,6 @@ namespace VAIISemestralkaASPNET.Controllers
             _context = context;
         }
 
-
         [Authorize (Roles = "Admin")]
         public async Task<IActionResult> Index()
         {
@@ -126,17 +125,29 @@ namespace VAIISemestralkaASPNET.Controllers
             try
             {
                 var userCars = _context.Car.Where(c => c.UserId == userId);
-                var userOrders = _context.Orders.Where(c => c.UserId == userId);
+                var userOrders = _context.Orders.Where(o => o.UserId == userId);
 
-                if (userCars.Any())
-                {
-                    _context.Car.RemoveRange(userCars);
-                    await _context.SaveChangesAsync();
-                }
 
                 if (userOrders.Any())
                 {
                     _context.Orders.RemoveRange(userOrders);
+                    await _context.SaveChangesAsync();
+                }
+
+                if (userCars.Any())
+                {
+                    foreach (var car in userCars)
+                    {
+                        foreach(var service in _context.Services.Where(s => s.CarID == car.Id))
+                        {
+                            service.CarID = null;
+                            service.VIN = car.VIN;
+                            _context.Update(service);
+                        }
+                    }
+                    await _context.SaveChangesAsync();
+
+                    _context.Car.RemoveRange(userCars);
                     await _context.SaveChangesAsync();
                 }
 
@@ -146,8 +157,5 @@ namespace VAIISemestralkaASPNET.Controllers
                 throw new InvalidOperationException("An error occurred while deleting cars.", ex);
             }
         }
-
-
-
     }
 }

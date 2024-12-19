@@ -104,23 +104,35 @@ namespace VAIISemestralkaASPNET.Areas.Identity.Pages.Account.Manage
             return Redirect("~/");
         }
 
-        public async Task DeleteAllUserDataInDBAsync(string userId)
+        private async Task DeleteAllUserDataInDBAsync(string userId)
         {
 
             try
             {
                 var userCars = _context.Car.Where(c => c.UserId == userId);
-                var userOrders = _context.Orders.Where(c => c.UserId == userId);
+                var userOrders = _context.Orders.Where(o => o.UserId == userId);
 
-                if (userCars.Any())
-                {
-                    _context.Car.RemoveRange(userCars);
-                    await _context.SaveChangesAsync();
-                }
 
                 if (userOrders.Any())
                 {
                     _context.Orders.RemoveRange(userOrders);
+                    await _context.SaveChangesAsync();
+                }
+
+                if (userCars.Any())
+                {
+                    foreach (var car in userCars)
+                    {
+                        foreach (var service in _context.Services.Where(s => s.CarID == car.Id))
+                        {
+                            service.CarID = null;
+                            service.VIN = car.VIN;
+                            _context.Update(service);
+                        }
+                    }
+                    await _context.SaveChangesAsync();
+
+                    _context.Car.RemoveRange(userCars);
                     await _context.SaveChangesAsync();
                 }
 
@@ -129,9 +141,6 @@ namespace VAIISemestralkaASPNET.Areas.Identity.Pages.Account.Manage
             {
                 throw new InvalidOperationException("An error occurred while deleting cars.", ex);
             }
-        }
-
-
-
+         }
     }
 }

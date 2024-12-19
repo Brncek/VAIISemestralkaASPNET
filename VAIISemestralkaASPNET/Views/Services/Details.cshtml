@@ -5,47 +5,57 @@
     var images = ViewBag.Images as List<string>;
     //TODO:: CSS -> DIFFERENT TEMPLATE
 }
+<link href="~/css/form.css" rel="stylesheet" />
+<link href="~/css/details.css" rel="stylesheet" />
 
-<h1>Service Details</h1>
+            <h1>Service Details</h1>
 
-<div>
-    <h4>Service Information</h4>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">Start Date</dt>
-        <dd class="col-sm-10">@Model.StartDate</dd>
+<div class="form_container_novh">
+    <div class ="register-form-nolimit">
+        <ul>
 
-        <dt class="col-sm-2">End Date</dt>
-        <dd class="col-sm-10">@Model.EndtDate</dd>
+            <div>
+                <h4>Service Information</h4>
+                <hr />
+                <dl class="row">
+                    <dt class="col-sm-2">Start Date</dt>
+                    <dd class="col-sm-10">@Model.StartDate</dd>
 
-        <dt class="col-sm-2">Work Time</dt>
-        <dd class="col-sm-10">@Model.WorkTime</dd>
+                    <dt class="col-sm-2">End Date</dt>
+                    <dd class="col-sm-10">@Model.EndtDate</dd>
 
-        <dt class="col-sm-2">Services Done</dt>
-        <dd class="col-sm-10">@Model.ServisesDone</dd>
-    </dl>
-</div>
+                    <dt class="col-sm-2">Work Time</dt>
+                    <dd class="col-sm-10">@Model.WorkTime</dd>
 
-@if (images != null && images.Any())
-{
-    <h4>Associated Images</h4>
-    <div class="row">
-        @foreach (var image in images)
-        {
-            <div class="col-md-3 mb-3">
-                <img src="@image" class="img-thumbnail" style="max-width: 100%; height: auto;" alt="Service Image" />
+                    <dt class="col-sm-2">Services Done</dt>
+                    <dd class="col-sm-10">@Model.ServisesDone</dd>
+                </dl>
             </div>
-        }
-    </div>
-}
-else
-{
-    <p>No images associated with this service.</p>
-}
 
-@if (User.IsInRole("Admin") || User.IsInRole("Manager") || User.IsInRole("Mechanic"))
-{
-    <div>
-        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Edit</a>
+            @if (images != null && images.Any())
+            {
+                <h4>Images</h4>
+                <div class="row">
+                    @foreach (var image in images)
+                    {
+                        <div class="col-md-3 mb-3">
+                            <img src="@image" class="img-thumbnail" style="max-width: 100%; height: auto;" alt="Service Image" />
+                        </div>
+                    }
+                </div>
+            }
+            else
+            {
+                <p>No images</p>
+            }
+
+            @if (User.IsInRole("Admin") || User.IsInRole("Manager") || User.IsInRole("Mechanic"))
+            {
+                <div>
+                    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Edit</a>
+                </div>
+            }
+
+        </ul>
     </div>
-}
+</div>

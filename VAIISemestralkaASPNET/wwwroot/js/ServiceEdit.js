@@ -1,4 +1,5 @@
-﻿$(".delete-image").click(function () {
+﻿//TODO:: preliezt
+$(".delete-image").click(function () {
     var button = $(this);
     var folder = button.data("folder");
     var fileName = button.data("file");

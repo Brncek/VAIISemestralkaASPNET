@@ -9,6 +9,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="wwwroot\uploads\service_5f5e00e4-3535-4185-b3be-9b30f50147c4\**" />
+    <Compile Remove="wwwroot\uploads\service_fab7fe3b-27f5-4ace-9e1f-0f2a4e74d751\**" />
+    <Content Remove="wwwroot\uploads\service_5f5e00e4-3535-4185-b3be-9b30f50147c4\**" />
+    <Content Remove="wwwroot\uploads\service_fab7fe3b-27f5-4ace-9e1f-0f2a4e74d751\**" />
+    <EmbeddedResource Remove="wwwroot\uploads\service_5f5e00e4-3535-4185-b3be-9b30f50147c4\**" />
+    <EmbeddedResource Remove="wwwroot\uploads\service_fab7fe3b-27f5-4ace-9e1f-0f2a4e74d751\**" />
+    <None Remove="wwwroot\uploads\service_5f5e00e4-3535-4185-b3be-9b30f50147c4\**" />
+    <None Remove="wwwroot\uploads\service_fab7fe3b-27f5-4ace-9e1f-0f2a4e74d751\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="8.0.10" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.11" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="8.0.11" />
@@ -24,8 +35,6 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\uploads\" />
-    <Folder Include="wwwroot\uploads\service_5f5e00e4-3535-4185-b3be-9b30f50147c4\" />
-    <Folder Include="wwwroot\uploads\service_fab7fe3b-27f5-4ace-9e1f-0f2a4e74d751\" />
   </ItemGroup>
 
 </Project>

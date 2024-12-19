@@ -20,7 +20,6 @@ namespace VAIISemestralkaASPNET.Models
         public string ServiceImagesLocation { get; set; }
         public string ServisesDone { get; set; }
 
-
         public Service()
         {
             VIN = string.Empty;

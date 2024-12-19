@@ -12,7 +12,6 @@ namespace VAIISemestralkaASPNET.Data
         {
         }
 
-        // DbSet for all models
         public DbSet<Car> Car { get; set; }
         public DbSet<Service> Services { get; set; }
         public DbSet<Order> Orders { get; set; }

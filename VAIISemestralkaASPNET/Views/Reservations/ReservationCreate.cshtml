@@ -7,21 +7,21 @@
 <link href="/css/form.css" rel="stylesheet">
 
 <div class="form-container">
-    <form asp-action="ReservationCreate">
+    <form asp-action="ReservationCreate" class="d-flex register-form">
         <hr />
         <ul>
-            <h4>Reservation - @Model.Date.ToString("dd.MM.yyyy HH:00")</h4>
+            <h4>Reservation - @Model.Date.ToString("dd.MM.yyyy HH:mm")</h4>
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group" hidden>
                 <input asp-for="Date" class="form-control" />
             </div>
             <div class="form-floating mb-3">
-                <label asp-for="CarID" class="control-label"></label>
                 <select asp-for="CarID" class="form-control" asp-items="ViewBag.CarID" required></select>
+                <label asp-for="CarID" class="control-label">Car</label>
             </div>
             <div class="form-floating mb-3">
-                <label asp-for="ServiseInfo" class="control-label"></label>
                 <input asp-for="ServiseInfo" class="form-control" required />
+                <label asp-for="ServiseInfo" class="control-label"></label>
                 <span asp-validation-for="ServiseInfo" class="text-danger"></span>
             </div>
 

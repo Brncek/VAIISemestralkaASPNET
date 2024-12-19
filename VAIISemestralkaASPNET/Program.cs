@@ -14,7 +14,6 @@ namespace VAIISemestralkaASPNET
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
             var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(connectionString));
@@ -74,16 +73,12 @@ namespace VAIISemestralkaASPNET
                 pattern: "{controller=Home}/{action=Index}/{id?}");
             app.MapRazorPages();
 
-
-           
-
             using (var scope = app.Services.CreateScope())
             {
                 var services = scope.ServiceProvider;
 
                 try
                 {
-                    // Initialize the default admin user and roles
                     InitializeAdminUser(services).Wait();
                 }
                 catch (Exception ex)
@@ -94,8 +89,6 @@ namespace VAIISemestralkaASPNET
 
             app.Run();
         }
-
-
 
         private static async Task InitializeAdminUser(IServiceProvider services)
         {

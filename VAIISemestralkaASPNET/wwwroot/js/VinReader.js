@@ -1,4 +1,5 @@
-﻿$(document).ready(function () {
+﻿//TODO:: preliezt
+$(document).ready(function () {
     $("#lookupButton").click(function () {
         const vin = $("#vinInput").val();
 

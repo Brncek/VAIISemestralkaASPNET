@@ -39,7 +39,6 @@ namespace VAIISemestralkaASPNET.Controllers
                 var applicationDbContext = _context.Car.Include(c => c.User).Where(c => c.UserId == userID);
                 return View(await applicationDbContext.ToListAsync());
             }
-            
         }
 
         [Authorize]
@@ -277,6 +276,5 @@ namespace VAIISemestralkaASPNET.Controllers
         {
             return _context.Car.Any(e => e.Id == id);
         }
-
     }
 }

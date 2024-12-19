@@ -11,7 +11,7 @@
 
 <h1>Cars</h1>
 
-@if (!User.IsInRole("Admin"))
+@if (!User.IsInRole("Admin") || !User.IsInRole("Mechanic") || !User.IsInRole("Manager"))
 {
     <div class="d-flex justify-content-center align-items-center">
         <form asp-action="Create" method="get">
@@ -21,8 +21,6 @@
 }
 
 <hr />
-
-
 
 <div class="container content">
     <table class="table">
@@ -52,7 +50,7 @@
                         @Html.DisplayFor(modelItem => item.VIN)
                     </td>
 
-                    @if (User.IsInRole("Admin"))
+                    @if (User.IsInRole("Admin") || !User.IsInRole("Mechanic") || !User.IsInRole("Manager"))
                     {
                         <td>
                             @(await UserManager.FindByIdAsync(item.UserId))
