@@ -1,35 +1,39 @@
 ﻿@model VAIISemestralkaASPNET.Models.NonDBDataHolders.OrderForm
 
 @{
-    ViewData["Title"] = "ReservationCreate";
+    ViewData["Title"] = "Reservation";
 }
 
+<link href="/css/form.css" rel="stylesheet">
 
-<h4>Reservation - @Model.Date.ToString("dd.MM.yyyy HH:00")</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="ReservationCreate">
+<div class="form-container">
+    <form asp-action="ReservationCreate">
+        <hr />
+        <ul>
+            <h4>Reservation - @Model.Date.ToString("dd.MM.yyyy HH:00")</h4>
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group" hidden>
                 <input asp-for="Date" class="form-control" />
             </div>
-            <div class="form-group">
+            <div class="form-floating mb-3">
                 <label asp-for="CarID" class="control-label"></label>
-                <select asp-for="CarID" class ="form-control" asp-items="ViewBag.CarID"></select>
+                <select asp-for="CarID" class="form-control" asp-items="ViewBag.CarID" required></select>
             </div>
-            <div class="form-group">
+            <div class="form-floating mb-3">
                 <label asp-for="ServiseInfo" class="control-label"></label>
-                <input asp-for="ServiseInfo" class="form-control" />
+                <input asp-for="ServiseInfo" class="form-control" required />
                 <span asp-validation-for="ServiseInfo" class="text-danger"></span>
             </div>
-           
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+
+            <div class="form-floating mb-3">
+                <input type="submit" value="Create" class="w-100 btn btn-lg btn-primary" />
             </div>
-        </form>
-    </div>
+        </ul>
+    </form>
+
 </div>
+
+
 
 
 

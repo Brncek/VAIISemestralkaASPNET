@@ -14,8 +14,8 @@ namespace VAIISemestralkaASPNET.Data
 
         // DbSet for all models
         public DbSet<Car> Car { get; set; }
-        public DbSet<Order> Orders { get; set; }
         public DbSet<Service> Services { get; set; }
+        public DbSet<Order> Orders { get; set; }
         public DbSet<ClosedDate> ClosedDates { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -34,11 +34,11 @@ namespace VAIISemestralkaASPNET.Data
                 .HasForeignKey(s => s.CarID)
                 .IsRequired(false); 
 
-            modelBuilder.Entity<Service>()
-                .HasOne(s => s.Order)
+            modelBuilder.Entity<Order>()
+                .HasOne(o => o.Service)
                 .WithMany()
-                .HasForeignKey(s => s.OrderId)
-                .IsRequired(true); 
+                .HasForeignKey(o => o.ServiceId)
+                .IsRequired(false); 
         }
     }
 }

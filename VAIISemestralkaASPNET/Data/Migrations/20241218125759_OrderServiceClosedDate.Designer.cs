@@ -12,8 +12,8 @@ using VAIISemestralkaASPNET.Data;
 namespace VAIISemestralkaASPNET.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241215215147_OrdersServisesTimesTables")]
-    partial class OrdersServisesTimesTables
+    [Migration("20241218125759_OrderServiceClosedDate")]
+    partial class OrderServiceClosedDate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -284,6 +284,9 @@ namespace VAIISemestralkaASPNET.Data.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
+                    b.Property<int?>("ServiceId")
+                        .HasColumnType("int");
+
                     b.Property<string>("ServiseInfo")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -304,6 +307,8 @@ namespace VAIISemestralkaASPNET.Data.Migrations
 
                     b.HasIndex("CarID");
 
+                    b.HasIndex("ServiceId");
+
                     b.HasIndex("UserId");
 
                     b.ToTable("Orders");
@@ -322,9 +327,6 @@ namespace VAIISemestralkaASPNET.Data.Migrations
 
                     b.Property<DateTime>("EndtDate")
                         .HasColumnType("datetime2");
-
-                    b.Property<int>("OrderId")
-                        .HasColumnType("int");
 
                     b.Property<string>("ServiceImagesLocation")
                         .IsRequired()
@@ -347,8 +349,6 @@ namespace VAIISemestralkaASPNET.Data.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CarID");
-
-                    b.HasIndex("OrderId");
 
                     b.ToTable("Services");
                 });
@@ -421,6 +421,10 @@ namespace VAIISemestralkaASPNET.Data.Migrations
                         .WithMany()
                         .HasForeignKey("CarID");
 
+                    b.HasOne("VAIISemestralkaASPNET.Models.Service", "Service")
+                        .WithMany()
+                        .HasForeignKey("ServiceId");
+
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
@@ -428,6 +432,8 @@ namespace VAIISemestralkaASPNET.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("Car");
+
+                    b.Navigation("Service");
 
                     b.Navigation("User");
                 });
@@ -438,15 +444,7 @@ namespace VAIISemestralkaASPNET.Data.Migrations
                         .WithMany()
                         .HasForeignKey("CarID");
 
-                    b.HasOne("VAIISemestralkaASPNET.Models.Order", "Order")
-                        .WithMany()
-                        .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Car");
-
-                    b.Navigation("Order");
                 });
 #pragma warning restore 612, 618
         }

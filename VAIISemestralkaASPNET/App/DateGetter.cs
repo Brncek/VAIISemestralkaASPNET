@@ -9,7 +9,7 @@ namespace VAIISemestralkaASPNET.App
         {
             List<DateTime> dates = new List<DateTime>();
 
-            DateTime pointer = DateTime.Today;
+            DateTime pointer = new (DateTime.Today.Year, DateTime.Today.Month, DateTime.Today.Day);
 
             while (dates.Count < 5) 
             {

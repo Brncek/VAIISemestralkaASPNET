@@ -1,6 +1,10 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @model List<(IdentityUser User, IList<string> Roles)>
 
+@{
+    ViewData["Title"] = "Users";
+}
+
 <link href="~/css/listCommon.css" rel="stylesheet" />
 
 <h1>Users</h1>
@@ -32,16 +36,12 @@
                         <a asp-action="EditRoles"
                            asp-route-userId="@user.User.Id"
                            class="btn btn-outline-success ">Edit Roles</a>
-                    </td>
 
-                    <td>
                         <button class="btn btn-danger delete-user"
                                 data-user-id="@user.User.Id">
                             Delete
                         </button>
                     </td>
-
-                
                 </tr>
             }
         </tbody>

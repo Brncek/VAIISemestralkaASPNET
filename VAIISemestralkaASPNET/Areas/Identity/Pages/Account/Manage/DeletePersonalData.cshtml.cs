@@ -89,7 +89,7 @@ namespace VAIISemestralkaASPNET.Areas.Identity.Pages.Account.Manage
             }
 
             var userId = await _userManager.GetUserIdAsync(user);
-            await DeleteAllCarsByUserIdAsync(userId);
+            await DeleteAllUserDataInDBAsync(userId);
 
             var result = await _userManager.DeleteAsync(user);
             if (!result.Succeeded)
@@ -104,25 +104,26 @@ namespace VAIISemestralkaASPNET.Areas.Identity.Pages.Account.Manage
             return Redirect("~/");
         }
 
-        public async Task DeleteAllCarsByUserIdAsync(string userId)
+        public async Task DeleteAllUserDataInDBAsync(string userId)
         {
-            if (string.IsNullOrEmpty(userId))
-            {
-                throw new ArgumentException("User ID cannot be null or empty.", nameof(userId));
-            }
 
             try
             {
                 var userCars = _context.Car.Where(c => c.UserId == userId);
+                var userOrders = _context.Orders.Where(c => c.UserId == userId);
 
-                if (!userCars.Any())
+                if (userCars.Any())
                 {
-                    return;
+                    _context.Car.RemoveRange(userCars);
+                    await _context.SaveChangesAsync();
                 }
 
-                _context.Car.RemoveRange(userCars);
+                if (userOrders.Any())
+                {
+                    _context.Orders.RemoveRange(userOrders);
+                    await _context.SaveChangesAsync();
+                }
 
-                await _context.SaveChangesAsync();
             }
             catch (Exception ex)
             {

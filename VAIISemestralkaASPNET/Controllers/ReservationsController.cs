@@ -22,15 +22,15 @@ namespace VAIISemestralkaASPNET.Controllers
             _userManager = userManager;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View(GetCalendarData());
+            return View(await GetCalendarData());
         }
 
         [Authorize(Roles = "Admin,Manager")]
-        public IActionResult ClosedDates()
+        public async Task<IActionResult> ClosedDates()
         {
-            RemoveOldDates();
+            await RemoveOldDates();
             return View(_context.ClosedDates.ToList());
         }
 
@@ -52,23 +52,32 @@ namespace VAIISemestralkaASPNET.Controllers
             int hourIndex = (int)(id) % CONSTANTS.CALENDAR_START_HOURS.Length;
             int datesIndex = (int)(id) / CONSTANTS.CALENDAR_START_HOURS.Length;
 
-            OrderForm orderForm = new()
+            try
             {
-                Date = new DateTime(dates[datesIndex].Year, dates[datesIndex].Month, dates[datesIndex].Day,
+                OrderForm orderForm = new()
+                {
+                    Date = new DateTime(dates[datesIndex].Year, dates[datesIndex].Month, dates[datesIndex].Day,
                 CONSTANTS.CALENDAR_START_HOURS[hourIndex], 0, 0)
-            };
+                };
 
-            if (!CheckDateValid(orderForm.Date))
+                if (!CheckDateValid(orderForm.Date, true))
+                {
+                    return NotFound();
+                }
+
+                var user = await _userManager.GetUserAsync(User);
+                var userId = await _userManager.GetUserIdAsync(user!);
+                var list = new SelectList(_context.Car.Where(c => c.UserId == userId), "Id", "Name");
+                ViewBag.CarID = list;
+
+                return View(orderForm);
+            }
+            catch
             {
                 return NotFound();
             }
 
-            var user = await _userManager.GetUserAsync(User);
-            var userId = await _userManager.GetUserIdAsync(user!);
-            var list  = new SelectList(_context.Car.Where(c => c.UserId == userId), "Id", "Name");
-            ViewBag.CarID = list;
-
-            return View(orderForm);
+            
         }
 
         [HttpPost, ActionName("ReservationCreate")]
@@ -76,9 +85,20 @@ namespace VAIISemestralkaASPNET.Controllers
         [Authorize]
         public async Task<IActionResult> ReservationCreateConfirm([Bind("Date, CarID, ServiseInfo")] OrderForm orderForm)
         {
-            if (!CheckDateValid(orderForm.Date))
+            if (!CheckDateValid(orderForm.Date, true))
+            {
+                return Forbid();
+            }
+
+            Car? car = await _context.Car.AsNoTracking().FirstOrDefaultAsync(c => c.Id == orderForm.CarID);
+            if (car == null) 
             {
                 return NotFound();
+            }
+
+            if (car.UserId != _userManager.GetUserId(User)!)
+            {
+                return Forbid();
             }
 
             Order order = new()
@@ -138,11 +158,29 @@ namespace VAIISemestralkaASPNET.Controllers
         public async Task<IActionResult> ClosedDatesCreate([Bind("Closed, Hour")] ClosedDateForm data)
         {
 
-            //TODO: VALIDATION
-
             ClosedDate date = new();
             data.Closed = new DateTime(data.Closed.Year, data.Closed.Month, data.Closed.Day, data.Hour, 0,0);
             
+            if(!CheckDateValid(data.Closed, true))
+            {
+                return View(data);
+            }
+
+            bool isin = false;
+
+            foreach (var hour in CONSTANTS.CALENDAR_START_HOURS)
+            {
+                if (data.Hour == hour)
+                {
+                    isin = true;
+                    break;
+                }
+            }
+
+            if (!isin)
+            {
+                return View(data);    
+            }
 
             date.Closed = data.Closed;
 
@@ -152,13 +190,14 @@ namespace VAIISemestralkaASPNET.Controllers
             return RedirectToAction(nameof(ClosedDates));
         }
 
-        private List<(string, List<(string, int)>)> GetCalendarData()
+        private async Task<List<(string, List<(string, int)>)>> GetCalendarData()
         {
+            int difference = CONSTANTS.CALENDAR_START_HOURS[1] - CONSTANTS.CALENDAR_START_HOURS[0];
             int[] hours = CONSTANTS.CALENDAR_START_HOURS;
 
             List<(string, List<(string, int)>)> calendarData = new();
 
-            RemoveOldDates();
+            await RemoveOldDates();
 
             List<ClosedDate> closedDates = _context.ClosedDates.Where(d => d.Closed >= DateTime.Today).ToList();
 
@@ -175,14 +214,16 @@ namespace VAIISemestralkaASPNET.Controllers
                     bool isClosed = false;
                     bool isFull = false;
 
-                    if(date.ToString("dd.MM.yyyy") == DateTime.Now.ToString("dd.MM.yyyy") && DateTime.Now.Hour >= hour)
+                    DateTime dateAddedHours = new DateTime(date.Year, date.Month, date.Day , hour, 0,0);
+
+                    if(dateAddedHours < DateTime.Now)
                     {
                         isClosed = true;
                     }
 
                     foreach (var closedDate in closedDates)
                     {
-                        if (closedDate.Closed.Date.ToString("dd.MM.yyyy") == date.ToString("dd.MM.yyyy") && closedDate.Closed.Hour == hour)
+                        if (closedDate.Closed == dateAddedHours)
                         {
                             isClosed = true;
                             break;
@@ -194,7 +235,9 @@ namespace VAIISemestralkaASPNET.Controllers
                         var otherOrders = _context.Orders.Where(o => o.Date > DateTime.Now);
                         foreach (var order in otherOrders)
                         {
-                            if (date.ToString("dd.MM.yyyy") == order.Date.ToString("dd.MM.yyyy") && order.Date.Hour == hour)
+                            DateTime closest = FindClosestCalendarDate(order.Date);
+
+                            if (dateAddedHours == closest && order.State != CONSTANTS.ORDER_STATE_DONE)
                             {
                                 isFull = true;
                             }
@@ -223,7 +266,7 @@ namespace VAIISemestralkaASPNET.Controllers
             return calendarData;
         }
 
-        private async void RemoveOldDates()
+        private async Task RemoveOldDates()
         {
             List<ClosedDate> oldDates = _context.ClosedDates.Where(d => d.Closed < DateTime.Today).ToList();
 
@@ -235,33 +278,55 @@ namespace VAIISemestralkaASPNET.Controllers
             await _context.SaveChangesAsync();
         }
 
-        private bool CheckDateValid(DateTime date)
-        {   
+        private DateTime FindClosestCalendarDate(DateTime date)
+        {
+            int difference = CONSTANTS.CALENDAR_START_HOURS[1] - CONSTANTS.CALENDAR_START_HOURS[0];
+
+            foreach (var hour in CONSTANTS.CALENDAR_START_HOURS)
+            {
+                if (date.Hour >= hour && date.Hour < hour + difference)
+                {
+                    return new DateTime(date.Year, date.Month, date.Day, hour, 0,0);
+                }
+            }
+
+            return date;
+        }
+
+        private bool CheckDateValid(DateTime date, bool validateWholeHours)
+        {
+            int difference =  CONSTANTS.CALENDAR_START_HOURS[1] - CONSTANTS.CALENDAR_START_HOURS[0];
+
             if (date <= DateTime.Now)
             {
                 return false;
             }
 
-            bool isin = false;
-            foreach (var time in CONSTANTS.CALENDAR_START_HOURS)
+            if (validateWholeHours)
             {
-                if (date.Hour == time)
+                bool isin = false;
+                foreach (var time in CONSTANTS.CALENDAR_START_HOURS)
                 {
-                    isin = true;
-                    break;
+                    if (date.Hour == time)
+                    {
+                        isin = true;
+                        break;
+                    }
                 }
-            }
 
-            if(!isin)
-            {
-                return false;
+                if (!isin)
+                {
+                    return false;
+                }
             }
 
             var closedDates = _context.ClosedDates;
             var otherOrders = _context.Orders.Where(o => o.Date > DateTime.Now);
+
+
             foreach (var closedDate in closedDates)
             {
-                if (date.ToString("dd.MM.yyyy HH") == closedDate.Closed.ToString("dd.MM.yyyy HH"))
+                if (date > closedDate.Closed && date < closedDate.Closed.AddHours(difference))
                 {
                     return false;
                 }
@@ -269,7 +334,8 @@ namespace VAIISemestralkaASPNET.Controllers
 
             foreach (var order in otherOrders)
             {
-                if (date == order.Date)
+                DateTime closest = FindClosestCalendarDate(order.Date);
+                if (date >= closest && date < closest && order.State != CONSTANTS.ORDER_STATE_DONE)
                 {
                     return false;
                 }

@@ -14,17 +14,17 @@
             <h4>New order</h4>
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-floating mb-3">
-                <input asp-for="Date" class="form-control" />
+                <input asp-for="Date" class="form-control" required />
                 <label asp-for="Date" class="control-label"></label>
                 <span asp-validation-for="Date" class="text-danger"></span>
             </div>
             <div class="form-floating mb-3">
-                <input asp-for="VIN" class="form-control" />
+                <input asp-for="VIN" class="form-control" required />
                 <label asp-for="VIN" class="control-label"></label>
                 <span asp-validation-for="VIN" class="text-danger"></span>
             </div>
             <div class="form-floating mb-3">
-                <input asp-for="ServiseInfo" class="form-control" />
+                <input asp-for="ServiseInfo" class="form-control" required />
                 <label asp-for="ServiseInfo" class="control-label"></label>
                 <span asp-validation-for="ServiseInfo" class="text-danger"></span>
             </div>

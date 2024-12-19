@@ -1,0 +1,154 @@
+﻿@model IEnumerable<VAIISemestralkaASPNET.Models.Service>
+
+@{
+    ViewData["Title"] = "Services";
+}
+
+<link href="~/css/form.css" rel="stylesheet" />
+<link href="~/css/listCommon.css" rel="stylesheet" />
+
+<h1>Services</h1>
+
+<hr />
+
+<h2>Actual</h2>
+
+<div class="container content">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.StartDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.EndtDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Car)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.VIN)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                @if (item.EndtDate > DateTime.Now.AddDays(-5))
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.StartDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.EndtDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Car.Name)
+                        </td>
+                        @if (item.CarID == null)
+                        {
+                            <td>
+                                @item.VIN
+                            </td>
+                        }
+                        else
+                        {
+                            <td>
+                                @item.Car.VIN
+                            </td>
+                        }
+                        <td>
+                            <div>
+                                <form asp-action="Details" method="get" asp-route-id="@item.Id">
+                                    <button type="submit" class="btn btn-outline-success buttonMargin">Details</button>
+                                </form>
+                            </div>
+                            <div>
+                                <form asp-action="Edit" method="get" asp-route-id="@item.Id">
+                                    <button type="submit" class="btn btn-outline-success buttonMargin">Edit</button>
+                                </form>
+                            </div>
+                            <div>
+                                <form asp-action="Delete" method="get" asp-route-id="@item.Id">
+                                    <button type="submit" class="btn btn-outline-success buttonMargin">Delete</button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+    <hr />
+    <h2>Old</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.StartDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.EndtDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Car)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.VIN)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                @if (item.EndtDate <= DateTime.Now.AddDays(-5))
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.StartDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.EndtDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Car.Name)
+                        </td>
+                        @if(item.CarID == null)
+                        {
+                            <td>
+                                @item.VIN
+                            </td>
+                        }
+                        else
+                        {
+                            <td>
+                                @item.Car.VIN
+                            </td>
+                        }
+                        
+                        <td>
+                            <div>
+                                <form asp-action="Details" method="get" asp-route-id="@item.Id">
+                                    <button type="submit" class="btn btn-outline-success buttonMargin">Details</button>
+                                </form>
+                            </div>
+                            <div>
+                                <form asp-action="Edit" method="get" asp-route-id="@item.Id">
+                                    <button type="submit" class="btn btn-outline-success buttonMargin">Edit</button>
+                                </form>
+                            </div>
+                            <div>
+                                <form asp-action="Delete" method="get" asp-route-id="@item.Id">
+                                    <button type="submit" class="btn btn-outline-success buttonMargin">Delete</button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>

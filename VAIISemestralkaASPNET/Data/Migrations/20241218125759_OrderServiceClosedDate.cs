@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace VAIISemestralkaASPNET.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class OrdersServisesTimesTables : Migration
+    public partial class OrderServiceClosedDate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -25,6 +25,30 @@ namespace VAIISemestralkaASPNET.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Services",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    EndtDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CarID = table.Column<int>(type: "int", nullable: true),
+                    VIN = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    WorkTime = table.Column<int>(type: "int", nullable: false),
+                    ServiceImagesLocation = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ServisesDone = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Services", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Services_Car_CarID",
+                        column: x => x.CarID,
+                        principalTable: "Car",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Orders",
                 columns: table => new
                 {
@@ -35,7 +59,8 @@ namespace VAIISemestralkaASPNET.Data.Migrations
                     VIN = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ServiseInfo = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     State = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ServiceId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -51,43 +76,22 @@ namespace VAIISemestralkaASPNET.Data.Migrations
                         column: x => x.CarID,
                         principalTable: "Car",
                         principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Services",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    EndtDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CarID = table.Column<int>(type: "int", nullable: true),
-                    VIN = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    WorkTime = table.Column<int>(type: "int", nullable: false),
-                    ServiceImagesLocation = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ServisesDone = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    OrderId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Services", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Services_Car_CarID",
-                        column: x => x.CarID,
-                        principalTable: "Car",
+                        name: "FK_Orders_Services_ServiceId",
+                        column: x => x.ServiceId,
+                        principalTable: "Services",
                         principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Services_Orders_OrderId",
-                        column: x => x.OrderId,
-                        principalTable: "Orders",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Orders_CarID",
                 table: "Orders",
                 column: "CarID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Orders_ServiceId",
+                table: "Orders",
+                column: "ServiceId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Orders_UserId",
@@ -98,11 +102,6 @@ namespace VAIISemestralkaASPNET.Data.Migrations
                 name: "IX_Services_CarID",
                 table: "Services",
                 column: "CarID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Services_OrderId",
-                table: "Services",
-                column: "OrderId");
         }
 
         /// <inheritdoc />
@@ -112,10 +111,10 @@ namespace VAIISemestralkaASPNET.Data.Migrations
                 name: "ClosedDates");
 
             migrationBuilder.DropTable(
-                name: "Services");
+                name: "Orders");
 
             migrationBuilder.DropTable(
-                name: "Orders");
+                name: "Services");
         }
     }
 }

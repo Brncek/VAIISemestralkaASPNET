@@ -47,7 +47,7 @@ namespace VAIISemestralkaASPNET.App
 
         public static async Task<IEnumerable<Info>> GetInfos(string vin)
         {
-            List<Info> list = new List<Info>();
+            List<Info> list = [];
 
             try
             {

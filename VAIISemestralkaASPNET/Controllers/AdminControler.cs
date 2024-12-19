@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
+using VAIISemestralkaASPNET.App;
 using VAIISemestralkaASPNET.Data;
 
 namespace VAIISemestralkaASPNET.Controllers
@@ -48,25 +49,11 @@ namespace VAIISemestralkaASPNET.Controllers
             var user = await _userManager.FindByIdAsync(id);
             if (user != null)
             {
-                await DeleteAllCarsByUserIdAsync(id);
+                await DeleteAllUserDataInDBAsync(id);
                 await _userManager.DeleteAsync(user);
                 return Json(new { success = true });
             }
             return Json(new { success = false, message = "User not found." });
-        }
-
-        [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> AssignRoles(string userId, List<string> roles)
-        {
-            var user = await _userManager.FindByIdAsync(userId);
-            if (user != null)
-            {
-                var currentRoles = await _userManager.GetRolesAsync(user);
-                await _userManager.RemoveFromRolesAsync(user, currentRoles); 
-                await _userManager.AddToRolesAsync(user, roles); 
-            }
-
-            return RedirectToAction("Index");
         }
 
         [Authorize(Roles = "Admin")]
@@ -80,7 +67,7 @@ namespace VAIISemestralkaASPNET.Controllers
 
             var userRoles = await _userManager.GetRolesAsync(user);
             var allRoles = _roleManager.Roles.Select(r => r.Name).ToList();
-            List<string?> rolesFiltered = new List<string?>();
+            List<string?> rolesFiltered = [];
 
             foreach (var item in allRoles)
             {
@@ -97,49 +84,62 @@ namespace VAIISemestralkaASPNET.Controllers
 
         [HttpPost]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> UpdateRoles(string userId, List<string> roles)
+        public async Task<IActionResult> UpdateRoles(string userId, string roles)
         {
+            if (roles == "Admin")
+            {
+                return Forbid();
+            }
+
+            bool isInRoles = false;
+
+            foreach (var realRole in CONSTANTS.ROLES)
+            {
+                if (roles == realRole)
+                {
+                    isInRoles = true;
+                    break;
+                }
+            }
+
+            if (!isInRoles)
+            {
+                return View();
+            }
+
             var user = await _userManager.FindByIdAsync(userId);
             if (user == null)
             {
                 return NotFound();
             }
 
-            foreach (var item in roles)
-            {
-                if (item == "Admin")
-                {
-                    return NotFound();
-                }
-            }
-
             var currentRoles = await _userManager.GetRolesAsync(user);
             await _userManager.RemoveFromRolesAsync(user, currentRoles);
-            await _userManager.AddToRolesAsync(user, roles); 
+            await _userManager.AddToRoleAsync(user, roles); 
 
             return RedirectToAction("Index");
         }
 
-        [Authorize(Roles = "Admin")]
-        public async Task DeleteAllCarsByUserIdAsync(string userId)
+        private async Task DeleteAllUserDataInDBAsync(string userId)
         {
-            if (string.IsNullOrEmpty(userId))
-            {
-                throw new ArgumentException("User ID cannot be null or empty.", nameof(userId));
-            }
 
             try
             {
                 var userCars = _context.Car.Where(c => c.UserId == userId);
+                var userOrders = _context.Orders.Where(c => c.UserId == userId);
 
-                if (!userCars.Any())
+                if (userCars.Any())
                 {
-                    return;
+                    _context.Car.RemoveRange(userCars);
+                    await _context.SaveChangesAsync();
                 }
 
-                _context.Car.RemoveRange(userCars);
+                if (userOrders.Any())
+                {
+                    _context.Orders.RemoveRange(userOrders);
+                    await _context.SaveChangesAsync();
+                }
 
-                await _context.SaveChangesAsync();
             }
             catch (Exception ex)
             {

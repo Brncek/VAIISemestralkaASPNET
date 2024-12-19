@@ -20,11 +20,6 @@ namespace VAIISemestralkaASPNET.Models
         public string ServiceImagesLocation { get; set; }
         public string ServisesDone { get; set; }
 
-        [Required]
-        public int OrderId { get; set; }
-
-        [ForeignKey("OrderId")]
-        public Order Order { get; set; }
 
         public Service()
         {

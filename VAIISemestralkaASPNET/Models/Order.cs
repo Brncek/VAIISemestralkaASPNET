@@ -26,6 +26,11 @@ namespace VAIISemestralkaASPNET.Models
         [ForeignKey("UserId")]
         public IdentityUser User { get; set; }
 
+        public int? ServiceId { get; set; }
+
+        [ForeignKey("ServiceId")]
+        public Service Service { get; set; }
+
         public Order()
         {
             VIN = string.Empty;

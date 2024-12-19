@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using VAIISemestralkaASPNET.App;
 using VAIISemestralkaASPNET.Data;
 using VAIISemestralkaASPNET.Models;
 
@@ -14,17 +16,30 @@ namespace VAIISemestralkaASPNET.Controllers
     public class OrdersController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public OrdersController(ApplicationDbContext context)
+        public OrdersController(ApplicationDbContext context, UserManager<IdentityUser> userManager)
         {
             _context = context;
+            _userManager = userManager; 
         }
 
         [Authorize]
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Orders.Include(o => o.Car).Include(o => o.User);
-            return View(await applicationDbContext.ToListAsync());
+            if (User.IsInRole("Admin") || User.IsInRole("Mechanic") || User.IsInRole("Manager"))
+            {
+				var applicationDbContext = _context.Orders.Include(o => o.Car).Include(o => o.User);
+				return View(await applicationDbContext.ToListAsync());
+			}
+            else
+            {
+				var user = await _userManager.GetUserAsync(User);
+				var userID = await _userManager.GetUserIdAsync(user!);
+				var applicationDbContext = _context.Orders.Where(o => o.UserId == userID)
+                    .Include(o => o.Car).Include(o => o.User);
+				return View(await applicationDbContext.ToListAsync());
+			}
         }
 
         [Authorize]
@@ -54,24 +69,29 @@ namespace VAIISemestralkaASPNET.Controllers
         }
 
 
-        //TODO: REPAIR
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin, Manager, Mechanic")]
         public async Task<IActionResult> Create([Bind("Id,Date,CarID,VIN,ServiseInfo,State,UserId")] Order order)
         {
-            if (ModelState.IsValid)
+            var user = await _userManager.GetUserAsync(User);
+            var userID = await _userManager.GetUserIdAsync(user!);
+            order.UserId = userID;
+            order.State = CONSTANTS.ORDER_STATE_RECEAVED;
+            order.CarID = null;
+
+            if (await VINAPI.GetVinDetailsAsync(order.VIN) != null) //CONTROL VIN
             {
                 _context.Add(order);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CarID"] = new SelectList(_context.Car, "Id", "UserId", order.CarID);
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", order.UserId);
+
+            order.VIN = "";
+
             return View(order);
         }
 
-        //TODO: REPAIR
         [Authorize(Roles = "Admin, Manager, Mechanic")]
         public async Task<IActionResult> Edit(int? id)
         {
@@ -85,49 +105,58 @@ namespace VAIISemestralkaASPNET.Controllers
             {
                 return NotFound();
             }
-            var list = new SelectList(_context.Car, "Id", "Name");
-            ViewBag.CarID = list;
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", order.UserId);
+
             return View(order);
         }
 
-        //TODO: REPAIR
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin, Manager, Mechanic")]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Date,CarID,VIN,ServiseInfo,State,UserId")] Order order)
+        public async Task<IActionResult> Edit(int id, DateTime date, string State)
         {
-            if (id != order.Id)
+            Order? order = await _context.Orders.FindAsync(id);
+
+
+            bool isin = false;
+
+            foreach (var acceptedState in CONSTANTS.ORDER_STATES())
             {
-                return NotFound();
+                if (State == acceptedState)
+                {
+                    isin = true;
+                }
             }
 
-            if (ModelState.IsValid)
+            if (order == null || !isin || date < DateTime.Now) //validation
             {
-                try
-                {
-                    _context.Update(order);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!OrderExists(order.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                return View(order);
+            } 
+            else
+            {
+                order.Date = date;
+                order.State = State;
             }
-            ViewData["CarID"] = new SelectList(_context.Car, "Id", "UserId", order.CarID);
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", order.UserId);
-            return View(order);
+
+            try
+            {
+                _context.Update(order);
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!OrderExists(order.Id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+            return RedirectToAction(nameof(Index));
+
         }
 
-        // GET: Orders/Delete/5
         [Authorize(Roles = "Admin, Manager")]
         public async Task<IActionResult> Delete(int? id)
         {
@@ -148,7 +177,6 @@ namespace VAIISemestralkaASPNET.Controllers
             return View(order);
         }
 
-        // POST: Orders/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin, Manager")]

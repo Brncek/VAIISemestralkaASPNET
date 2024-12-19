@@ -12,6 +12,8 @@
         public static string ORDER_STATE_IN_PROCES = "INPROCES";
         public static string ORDER_STATE_DONE = "DONE";
 
+        public static string[] ROLES = { "Admin", "Manager", "User", "Mechanic" }; 
+
         public static List<string> ORDER_STATES()
         {
             List<string> list = new List<string>();

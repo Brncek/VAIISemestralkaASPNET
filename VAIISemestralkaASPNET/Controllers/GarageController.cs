@@ -78,9 +78,9 @@ namespace VAIISemestralkaASPNET.Controllers
 
             try
             {
-                string make = carDetails.Make;
-                string model = carDetails.Model;
-                int year = carDetails.ModelYear;
+                string make = carDetails!.Make;
+                string model = carDetails!.Model;
+                int year = carDetails!.ModelYear;
                 name = make + " " + model + " " + year;
             }
             catch 
@@ -125,7 +125,13 @@ namespace VAIISemestralkaASPNET.Controllers
             }
 
             var user = await _userManager.GetUserAsync(User);
-            var userId = await _userManager.GetUserIdAsync(user);
+            var userId = await _userManager.GetUserIdAsync(user!);
+
+            if (await VINAPI.GetVinDetailsAsync(car.VIN) == null || String.IsNullOrEmpty(car.Name))
+            {
+                car.VIN = "";
+                return View(car);
+            }
 
             try
             {
@@ -168,6 +174,14 @@ namespace VAIISemestralkaASPNET.Controllers
                 return NotFound();
             }
 
+            var user = await _userManager.GetUserAsync(User);
+            var userId = await _userManager.GetUserIdAsync(user!);
+
+            if (!(User.IsInRole("Admin") || User.IsInRole("Mechanic") || User.IsInRole("Manager") || car.UserId == userId))
+            {
+                return Forbid();
+            }
+
             return View(car);
         }
 
@@ -181,17 +195,82 @@ namespace VAIISemestralkaASPNET.Controllers
             if (car != null)
             {
                 var user = await _userManager.GetUserAsync(User);
-                var userId = await _userManager.GetUserIdAsync(user);
+                var userId = await _userManager.GetUserIdAsync(user!);
+                var ordersWithCar = _context.Orders.Where(o => o.CarID == id);
+                var servicesWithCar = _context.Services.Where(o => o.CarID == id);
 
-                if ( User.IsInRole("Admin")  || User.IsInRole("Mechanic") || User.IsInRole("Manager") || car.UserId == userId)
+
+                if (User.IsInRole("Admin") || User.IsInRole("Mechanic") || User.IsInRole("Manager") || car.UserId == userId)
                 {
+                    _context.RemoveRange(ordersWithCar);
+
+                    foreach (var service in servicesWithCar)
+                    {
+                        service.VIN = car.VIN;
+                        service.CarID = null;
+                        _context.Update(service);
+                    }
+
+                    await _context.SaveChangesAsync();
+
                     _context.Car.Remove(car);
 
+                } else
+                {
+                    return Forbid();
                 }
+
+                await _context.SaveChangesAsync();
             }
 
-            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
+        }
+
+        [Authorize(Roles = "Mechanic")] 
+        public IActionResult VinDetails()
+        {
+            return View();
+        }
+
+        [Authorize(Roles = "Mechanic")]
+        public async Task<IActionResult> GetVinDetails(string vin)
+        {
+            if (string.IsNullOrWhiteSpace(vin))
+            {
+                return Json(new { success = false, message = "VIN is required." });
+            }
+
+            try
+            {
+                VINDetails details = (await VINAPI.GetVinDetailsAsync(vin))!; 
+
+                var detailsDictionary = new Dictionary<string, object>
+                {
+                    { "VIN", details.VIN },
+                    { "Make", details.Make },
+                    { "Model", details.Model },
+                    { "Model Year", details.ModelYear },
+                    { "Body", details.Body },
+                    { "Drive", details.Drive },
+                    { "Engine Displacement", details.EngineDisplacement },
+                    { "Engine Power (KW)", details.EnginePowerKW },
+                    { "Engine Power (HP)", details.EnginePowerHP },
+                    { "Fuel Type", details.FuelType },
+                    { "Transmission", details.Transmission },
+                    { "Number of Gears", details.NumberOfGears },
+                    { "Emission Standard", details.EmissionStandard },
+                    { "Max Speed", details.MaxSpeed },
+                    { "Color", details.Color },
+                    { "Number of Doors", details.NumberOfDoors },
+                    { "Number of Seats", details.NumberOfSeats }
+                };
+
+                return Json(new { success = true, details = detailsDictionary });
+            }
+            catch (Exception)
+            {
+                return Json(new { success = false, message = "VIN is not recognized" });
+            }
         }
 
         private bool CarExists(int id)

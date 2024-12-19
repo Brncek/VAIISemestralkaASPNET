@@ -1,7 +1,10 @@
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
 using VAIISemestralkaASPNET.Data;
+using VAIISemestralkaASPNET.Models;
+using VAIISemestralkaASPNET.App;
 
 namespace VAIISemestralkaASPNET
 {
@@ -32,6 +35,20 @@ namespace VAIISemestralkaASPNET
 
             builder.Services.AddControllersWithViews();
 
+            builder.Services.Configure<IISServerOptions>(options =>
+            {
+                options.MaxRequestBodySize = int.MaxValue; 
+            });
+
+            builder.WebHost.ConfigureKestrel(serverOptions =>
+            {
+                serverOptions.Limits.MaxRequestBodySize = 150 * 1024 * 1024;
+            });
+
+            builder.Services.Configure<FormOptions>(options =>
+            {
+                options.MultipartBodyLengthLimit = 150 * 1024 * 1024; 
+            });
 
             var app = builder.Build();
 
@@ -85,7 +102,7 @@ namespace VAIISemestralkaASPNET
             var userManager = services.GetRequiredService<UserManager<IdentityUser>>();
             var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
 
-            string[] roles = { "Admin", "Manager", "User", "Mechanic" };
+            string[] roles = CONSTANTS.ROLES;
 
             foreach (var role in roles)
             {

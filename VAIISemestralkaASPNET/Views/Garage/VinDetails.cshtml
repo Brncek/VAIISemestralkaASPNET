@@ -1,0 +1,27 @@
+﻿@{
+    ViewData["Title"] = "VIN reader";
+}
+
+<link href="~/css/details.css" rel="stylesheet" />
+<link href="~/css/form.css" rel="stylesheet" />
+
+<div class="container">
+    <h3>VIN reader</h3>
+    <hr />
+
+    <div class="form-group">
+        <label for="vinInput">Enter VIN:</label>
+        <input type="text" id="vinInput" class="form-control" placeholder="Enter VIN">
+        <button id="lookupButton" class="btn btn-primary mt-2">Lookup</button>
+    </div>
+
+    <hr />
+
+    <div id="vinDetails">
+        <h4>Vehicle Details</h4>
+        <dl class="row">
+        </dl>
+    </div>
+</div>
+
+<script src="\js\vinreader.js"></script>
