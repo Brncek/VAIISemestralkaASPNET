@@ -44,6 +44,9 @@ Publish the project to a folder on your system. Once the publishing process is c
 If you want to specifi the port navigate to appsettings.json open it and change the original port 5041 to a different one
 
 Note: There is on start admin user, there could be only one. 
+
 Username: Admin 
+
 Default password: admin
+
 i recomend changing the password
