@@ -4,8 +4,7 @@
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
 USER app
 WORKDIR /app
-EXPOSE 8080
-EXPOSE 8081
+EXPOSE 5041
 
 
 # This stage is used to build the service project
@@ -26,5 +25,9 @@ RUN dotnet publish "./VAIISemestralkaASPNET.csproj" -c $BUILD_CONFIGURATION -o /
 # This stage is used in production or when running from VS in regular mode (Default when not using the Debug configuration)
 FROM base AS final
 WORKDIR /app
-COPY --from=publish /app/publish .
+USER root
+COPY --from=publish /app/publish . 
+COPY ["VAIISemestralkaASPNET/app.db", "./"]
+RUN chmod 666 /app/app.db && chmod -R 777 /app
+USER app
 ENTRYPOINT ["dotnet", "VAIISemestralkaASPNET.dll"]
