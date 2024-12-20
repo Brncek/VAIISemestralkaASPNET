@@ -1,5 +1,4 @@
-﻿//TODO:: preliezt
-$(document).ready(function () {
+﻿$(document).ready(function () {
     $('.delete-user').on('click', function () {
         const userId = $(this).data('user-id');
         if (confirm('Are you sure you want to delete this user?')) {
